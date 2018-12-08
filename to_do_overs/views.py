@@ -9,3 +9,11 @@ from django.http import HttpResponse
 def index(request):
     return render(request, 'to_do_overs/index.html')
 
+
+def login(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    return render(request, 'to_do_overs/dashboard.html', {
+        'username': username,
+    })
+
