@@ -1,0 +1,10 @@
+
+db.sqlite3
+
+.idea/
+
+*.pyc
+
+to_do_overs/migrations/
+
+venv/
