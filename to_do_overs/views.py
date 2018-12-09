@@ -75,3 +75,8 @@ def create_task_action(request):
     else:
         messages.warning(request, 'You need to log in to view that page.')
         return redirect('to_do_overs:index')
+
+
+def logout(request):
+    request.session.flush()
+    return render(request, 'to_do_overs/index.html')

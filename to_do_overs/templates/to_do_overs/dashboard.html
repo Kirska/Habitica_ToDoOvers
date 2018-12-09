@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Habitica ToDoOver Dashboard</title>
 </head>
 <body>
 
@@ -21,4 +21,5 @@ Hello {{ username }}!<br />
 Create a new To Do Over task <a href="{% url 'to_do_overs:create_task' %}">here</a>.
 
 </body>
+<footer><a href="{% url 'to_do_overs:logout' %}">Log Out</a></footer>
 </html>

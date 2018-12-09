@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
     url(r'^create_task/$', views.create_task, name='create_task'),
     url(r'^create_task_action/$', views.create_task_action, name='create_task_action'),
+    url(r'^logout/$', views.logout, name='logout'),
 ]
