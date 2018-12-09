@@ -18,6 +18,8 @@ class ToDoOversData:
         self.api_token = ''
         self.logged_in = False
 
+        self.task_name = ''
+
     def login(self):
         req = requests.post('https://habitica.com/api/v3/user/auth/local/login',
                             data={'username': self.username, 'password': self.password})
@@ -63,3 +65,5 @@ class ToDoOversData:
         else:
             return False
 
+    def create_task(self):
+        return True

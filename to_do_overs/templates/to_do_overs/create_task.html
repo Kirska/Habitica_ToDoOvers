@@ -10,6 +10,14 @@
 
 Create a new To Do Over task.<br />
 
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
 <form action="{% url 'to_do_overs:create_task_action' %}" method="post">
     {% csrf_token %}
     Task: <input type="text" name="task"><br />
