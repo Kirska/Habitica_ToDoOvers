@@ -65,7 +65,6 @@ def create_task(request):
 def create_task_action(request):
     session_class = jsonpickle.decode(request.session['session_data'])
     if session_class.logged_in:
-        print "in cta"
         session_class.task_name = request.POST['task']
         if session_class.create_task():
             messages.success(request, 'Task created successfully.')

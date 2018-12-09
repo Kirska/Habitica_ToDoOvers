@@ -66,4 +66,14 @@ class ToDoOversData:
             return False
 
     def create_task(self):
-        return True
+        headers = {'x-api-user': self.hab_user_id.encode('utf-8'), 'x-api-key': self.api_token.encode('utf-8')}
+
+        req = requests.post('https://habitica.com/api/v3/tasks/user', headers=headers, data={
+            'text': self.task_name,
+            'type': 'todo',
+            'notes': 'Added by the ToDoOvers API tool.'
+        })
+        if req.status_code == 201:
+            return True
+        else:
+            return False
