@@ -1,5 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
 <h1>Habitica To-Do-Overs</h1>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-Username {{ username }}
+Hello {{ username }}!<br />
+
+Create a new To Do Over task <a href="{% url 'to_do_overs:create_task' %}">here</a>.
+
+</body>
+</html>

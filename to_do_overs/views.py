@@ -44,7 +44,32 @@ def login_api_key(request):
 
 def dashboard(request):
     session_class = jsonpickle.decode(request.session['session_data'])
-    username = session_class.username
-    return render(request, 'to_do_overs/dashboard.html', {
-            'username': username,
-    })
+    if session_class.logged_in:
+        username = session_class.username
+        return render(request, 'to_do_overs/dashboard.html', {
+                'username': username,
+        })
+    else:
+        return render(request, 'to_do_overs/index.html', {
+            'error_message': 'You need to log in to view that page.',
+        })
+
+
+def create_task(request):
+    session_class = jsonpickle.decode(request.session['session_data'])
+    if session_class.logged_in:
+        return render(request, 'to_do_overs/create_task.html')
+    else:
+        return render(request, 'to_do_overs/index.html', {
+            'error_message': 'You need to log in to view that page.',
+        })
+
+
+def create_task_action(request):
+    session_class = jsonpickle.decode(request.session['session_data'])
+    if session_class.logged_in:
+        return render(request, 'to_do_overs/create_task.html')
+    else:
+        return render(request, 'to_do_overs/index.html', {
+            'error_message': 'You need to log in to view that page.',
+        })

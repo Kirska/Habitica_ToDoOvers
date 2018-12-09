@@ -8,4 +8,6 @@ urlpatterns = [
     url(r'^login/$', views.login, name='login'),
     url(r'^login_api_key/$', views.login_api_key, name='login_api_key'),
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
+    url(r'^create_task/$', views.create_task, name='create_task'),
+    url(r'^create_task_action/$', views.create_task_action, name='create_task_action'),
 ]

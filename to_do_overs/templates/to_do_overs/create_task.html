@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1>Habitica To-Do-Overs</h1>
+
+Create a new To Do Over task.<br />
+
+<form action="{% url 'to_do_overs:create_task_action' %}" method="post">
+    {% csrf_token %}
+    Task: <input type="text" name="task"><br />
+    <input type="submit" value="Make Task">
+</form>
+
+</body>
+</html>
