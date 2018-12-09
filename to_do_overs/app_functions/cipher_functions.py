@@ -71,7 +71,7 @@ def test_cipher(test_text):
     plain_text = decrypt_text(cipher_text)
     print plain_text
 
-
+"""
 parser = argparse.ArgumentParser(description='Generate a cipher.')
 parser.add_argument('--generate', action='store_true',
                     help='generate a new cipher and store in a file USE WITH CAUTION')
@@ -83,3 +83,4 @@ if args.generate:
     generate_cipher_key()
 elif args.test:
     test_cipher(args.test)
+"""

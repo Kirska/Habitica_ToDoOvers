@@ -22,7 +22,7 @@ def login(request):
         request.session['session_data'] = jsonpickle.encode(session_class)
         return redirect('to_do_overs:dashboard')
     else:
-        return redirect('to_do_overs:index', {
+        return render(request, 'to_do_overs/index.html', {
             'error_message': 'Login failed',
         })
 
