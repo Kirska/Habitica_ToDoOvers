@@ -27,6 +27,21 @@ def login(request):
         })
 
 
+def login_api_key(request):
+    session_class = ToDoOversData()
+
+    session_class.hab_user_id = request.POST['user_id']
+    session_class.api_token = request.POST['api_token']
+
+    if session_class.login_api_key():
+        request.session['session_data'] = jsonpickle.encode(session_class)
+        return redirect('to_do_overs:dashboard')
+    else:
+        return render(request, 'to_do_overs/index.html', {
+            'error_message': 'Login failed',
+        })
+
+
 def dashboard(request):
     session_class = jsonpickle.decode(request.session['session_data'])
     username = session_class.username
