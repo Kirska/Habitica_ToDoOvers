@@ -20,8 +20,7 @@ Create a new To Do Over task.<br />
 
 <form action="{% url 'to_do_overs:create_task_action' %}" method="post">
     {% csrf_token %}
-    Task: <input type="text" name="task"><br />
-    Repeat every how many days: <input type="text" name="repeat-days"><br />
+    {{ form.as_p }}
     Your task will repeat upon completion, starting the day after completion, with a due date of the completion date
     plus the number of days specified above.<br />
     Your task's first due date will be today plus the number of days specified above. <br />

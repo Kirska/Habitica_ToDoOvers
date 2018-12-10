@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from app_functions.to_do_overs_data import ToDoOversData
+from forms import TasksForm
+from models import Users
 import django.contrib.messages as messages
 import jsonpickle
 
@@ -56,7 +58,8 @@ def dashboard(request):
 def create_task(request):
     session_class = jsonpickle.decode(request.session['session_data'])
     if session_class.logged_in:
-        return render(request, 'to_do_overs/create_task.html')
+        form = TasksForm()
+        return render(request, 'to_do_overs/create_task.html', {'form': form})
     else:
         messages.warning(request, 'You need to log in to view that page.')
         return redirect('to_do_overs:index')
@@ -65,17 +68,28 @@ def create_task(request):
 def create_task_action(request):
     session_class = jsonpickle.decode(request.session['session_data'])
     if session_class.logged_in:
-        session_class.task_name = request.POST['task']
-        session_class.task_days = request.POST['repeat-days']
-        if int(session_class.task_days) < 0:
-            messages.warning(request, 'Invalid repeat day number.')
-            return redirect('to_do_overs:create_task')
-        if session_class.create_task():
-            messages.success(request, 'Task created successfully.')
-            return redirect('to_do_overs:dashboard')
-        else:
-            messages.warning(request, 'Task creation failed.')
-            return redirect('to_do_overs:create_task')
+        form = TasksForm(request.POST)
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.notes += ":repeat:Automatically created by ToDoOvers API tool."
+            task.owner = Users.objects.get(user_id=session_class.hab_user_id)
+
+            session_class.notes = task.notes
+            session_class.task_name = task.name
+            session_class.task_days = task.days
+            session_class.priority = task.priority
+
+            if int(session_class.task_days) < 0:
+                messages.warning(request, 'Invalid repeat day number.')
+                return redirect('to_do_overs:create_task')
+            if session_class.create_task():
+                messages.success(request, 'Task created successfully.')
+                task.task_id = session_class.task_id
+                task.save()
+                return redirect('to_do_overs:dashboard')
+            else:
+                messages.warning(request, 'Task creation failed.')
+                return redirect('to_do_overs:create_task')
     else:
         messages.warning(request, 'You need to log in to view that page.')
         return redirect('to_do_overs:index')

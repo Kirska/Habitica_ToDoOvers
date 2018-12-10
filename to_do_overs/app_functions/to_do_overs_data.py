@@ -7,7 +7,7 @@ __license__ = "MIT"
 
 from cipher_functions import encrypt_text, decrypt_text
 import requests
-from to_do_overs.models import Users
+from to_do_overs.models import Users, Tasks
 from datetime import datetime, timedelta
 
 
@@ -21,6 +21,9 @@ class ToDoOversData:
 
         self.task_name = ''
         self.task_days = 0
+        self.task_id = ''
+        self.priority = ''
+        self.notes = ''
 
     def login(self):
         req = requests.post('https://habitica.com/api/v3/user/auth/local/login',
@@ -76,10 +79,13 @@ class ToDoOversData:
             req = requests.post('https://habitica.com/api/v3/tasks/user', headers=headers, data={
                 'text': self.task_name,
                 'type': 'todo',
-                'notes': 'Added by the ToDoOvers API tool.',
+                'notes': self.notes,
                 'date': due_date,
+                'priority': self.priority,
             })
             if req.status_code == 201:
+                req_json = req.json()
+                self.task_id = req_json['data']['id']
                 return True
             else:
                 return False
@@ -87,9 +93,12 @@ class ToDoOversData:
             req = requests.post('https://habitica.com/api/v3/tasks/user', headers=headers, data={
                 'text': self.task_name,
                 'type': 'todo',
-                'notes': 'Added by the ToDoOvers API tool.',
+                'notes': self.notes,
+                'priority': self.priority,
             })
             if req.status_code == 201:
+                req_json = req.json()
+                self.task_id = req_json['data']['id']
                 return True
             else:
                 return False
