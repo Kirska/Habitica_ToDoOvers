@@ -66,6 +66,10 @@ def create_task_action(request):
     session_class = jsonpickle.decode(request.session['session_data'])
     if session_class.logged_in:
         session_class.task_name = request.POST['task']
+        session_class.task_days = request.POST['repeat-days']
+        if int(session_class.task_days) < 0:
+            messages.warning(request, 'Invalid repeat day number.')
+            return redirect('to_do_overs:create_task')
         if session_class.create_task():
             messages.success(request, 'Task created successfully.')
             return redirect('to_do_overs:dashboard')

@@ -8,6 +8,7 @@ __license__ = "MIT"
 from cipher_functions import encrypt_text, decrypt_text
 import requests
 from to_do_overs.models import Users
+from datetime import datetime, timedelta
 
 
 class ToDoOversData:
@@ -19,6 +20,7 @@ class ToDoOversData:
         self.logged_in = False
 
         self.task_name = ''
+        self.task_days = 0
 
     def login(self):
         req = requests.post('https://habitica.com/api/v3/user/auth/local/login',
@@ -68,12 +70,26 @@ class ToDoOversData:
     def create_task(self):
         headers = {'x-api-user': self.hab_user_id.encode('utf-8'), 'x-api-key': self.api_token.encode('utf-8')}
 
-        req = requests.post('https://habitica.com/api/v3/tasks/user', headers=headers, data={
-            'text': self.task_name,
-            'type': 'todo',
-            'notes': 'Added by the ToDoOvers API tool.'
-        })
-        if req.status_code == 201:
-            return True
+        if int(self.task_days) > 0:
+            due_date = datetime.now() + timedelta(days=int(self.task_days))
+
+            req = requests.post('https://habitica.com/api/v3/tasks/user', headers=headers, data={
+                'text': self.task_name,
+                'type': 'todo',
+                'notes': 'Added by the ToDoOvers API tool.',
+                'date': due_date,
+            })
+            if req.status_code == 201:
+                return True
+            else:
+                return False
         else:
-            return False
+            req = requests.post('https://habitica.com/api/v3/tasks/user', headers=headers, data={
+                'text': self.task_name,
+                'type': 'todo',
+                'notes': 'Added by the ToDoOvers API tool.',
+            })
+            if req.status_code == 201:
+                return True
+            else:
+                return False
