@@ -40,18 +40,19 @@ def encrypt_text(text):
         return cipher_text
 
 
-def decrypt_text(cipher_text, cipher_file=CIPHER_FILE):
+def decrypt_text(cipher_text, cipher_file_path=CIPHER_FILE):
     """Decrypt some text back into the plain text.
 
     Read the cipher key from file and use it to decrypt some text.
 
     Args:
         cipher_text: the encrypted text we want to decrypt.
+        cipher_file_path: optional specification of path to file.
 
     Returns:
         The decrypted text.
     """
-    with open(CIPHER_FILE, 'rb') as cipher_file:
+    with open(cipher_file_path, 'rb') as cipher_file:
         key = cipher_file.read()
         cipher_suite = Fernet(key)
         plain_text = cipher_suite.decrypt(cipher_text)
