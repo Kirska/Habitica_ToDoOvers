@@ -40,7 +40,7 @@ def encrypt_text(text):
         return cipher_text
 
 
-def decrypt_text(cipher_text):
+def decrypt_text(cipher_text, cipher_file=CIPHER_FILE):
     """Decrypt some text back into the plain text.
 
     Read the cipher key from file and use it to decrypt some text.
