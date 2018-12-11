@@ -16,9 +16,35 @@
   </ul>
 {% endif %}
 
-Hello {{ username }}!<br />
+Hello {{ username }}!<br /><br />
 
 Create a new To Do Over task <a href="{% url 'to_do_overs:create_task' %}">here</a>.
+
+<br />
+<br />
+
+{% if tasks %}
+    The following tasks exist in the ToDoOver database:<br />
+    <table>
+        <tr>
+            <th>Task</th>
+            <th>Days</th>
+            <th>Difficulty</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    {% for task in tasks %}
+        <tr>
+            <td>{{ task.name }}</td>
+            <td>{{ task.days }}</td>
+            <td>{{ task.get_priority_display }}</td>
+            <td>Edit</td>
+            <td><a href="{% url 'to_do_overs:delete_task' task.pk %}">Delete</a></td>
+        </tr>
+    {% endfor %}
+    </table>
+    <br/>
+{% endif %}
 
 </body>
 <footer><a href="{% url 'to_do_overs:logout' %}">Log Out</a></footer>

@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^create_task/$', views.create_task, name='create_task'),
     url(r'^create_task_action/$', views.create_task_action, name='create_task_action'),
     url(r'^logout/$', views.logout, name='logout'),
+    url(r'^delete_task/(?P<task_pk>[-\w]+)/$', views.delete_task, name='delete_task'),
 ]

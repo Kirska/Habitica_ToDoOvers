@@ -17,6 +17,9 @@ class Users(models.Model):
     api_key = models.CharField(max_length=255)
     username = models.CharField(max_length=255)
 
+    def __str__(self):
+        return str(self.pk) + ':' + str(self.user_id) + ':' + str(self.username)
+
 
 class Tasks(models.Model):
     """Model for the tasks created by users.
@@ -45,4 +48,7 @@ class Tasks(models.Model):
     priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, blank=False, default=EASY)
     days = models.PositiveIntegerField(default=0)
     owner = models.ForeignKey(Users, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.pk) + ':' + str(self.name) + ':' + str(self.task_id)
 

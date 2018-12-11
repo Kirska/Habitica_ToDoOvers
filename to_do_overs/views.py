@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from app_functions.to_do_overs_data import ToDoOversData
 from forms import TasksForm
-from models import Users
+from models import Users, Tasks
 import django.contrib.messages as messages
 import jsonpickle
 from app_functions.cipher_functions import encrypt_text
@@ -82,10 +82,14 @@ def dashboard(request):
         Renders the dashboard if user is logged in. Redirects to index if user is not logged in.
     """
     session_class = jsonpickle.decode(request.session['session_data'])
+
+    task_list = Tasks.objects.filter(owner__user_id=session_class.hab_user_id)
+
     if session_class.logged_in:
         username = session_class.username
         return render(request, 'to_do_overs/dashboard.html', {
                 'username': username,
+                'tasks': task_list,
         })
     else:
         messages.warning(request, 'You need to log in to view that page.')
@@ -160,3 +164,35 @@ def logout(request):
     """
     request.session.flush()
     return render(request, 'to_do_overs/index.html')
+
+
+def delete_task(request, task_pk):
+    """Deletes the requested task from the tool database.
+
+    Args:
+        request: the request from user.
+        task_id: the ID of the task to be deleted.
+
+    Returns:
+        Renders dashboard page with error or success.
+    """
+    session_class = jsonpickle.decode(request.session['session_data'])
+
+    if not session_class.logged_in:
+        messages.warning(request, 'You need to log in to view that page.')
+        return redirect('to_do_overs:index')
+
+    # first we need to check that this user owns this task
+    task = Tasks.objects.get(pk=task_pk)
+    owner = Users.objects.get(pk=task.owner.pk)
+
+    logged_in_user = Users.objects.get(user_id=session_class.hab_user_id)
+    print logged_in_user
+    print owner
+    if logged_in_user.pk == owner.pk:
+        task.delete()
+        messages.success(request, 'Task deleted successfully.')
+        return redirect('to_do_overs:dashboard')
+    else:
+        messages.warning(request, 'You are not authorized to delete that task.')
+        return redirect('to_do_overs:dashboard')
