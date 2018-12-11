@@ -4,8 +4,6 @@
 from __future__ import unicode_literals
 from django.db import models
 
-# Create your models here.
-
 
 class Users(models.Model):
     """Model for the users of the tool.

@@ -4,12 +4,12 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
 from app_functions.to_do_overs_data import ToDoOversData
 from forms import TasksForm
 from models import Users
 import django.contrib.messages as messages
 import jsonpickle
+from app_functions.cipher_functions import encrypt_text
 
 
 def index(request):
@@ -62,7 +62,7 @@ def login_api_key(request):
     session_class = ToDoOversData()
 
     session_class.hab_user_id = request.POST['user_id']
-    session_class.api_token = request.POST['api_token']
+    session_class.api_token = encrypt_text(request.POST['api_token'].encode('utf-8'))
 
     if session_class.login_api_key():
         request.session['session_data'] = jsonpickle.encode(session_class)

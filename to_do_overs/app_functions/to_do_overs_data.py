@@ -54,13 +54,11 @@ class ToDoOversData:
         if req.status_code == 200:
             req_json = req.json()
             self.hab_user_id = req_json['data']['id']
-            self.api_token = req_json['data']['apiToken']
+            self.api_token = encrypt_text(req_json['data']['apiToken'].encode('utf-8'))
             self.username = req_json['data']['username']
 
-            enc_token = encrypt_text(self.api_token.encode('utf-8'))
-
             Users.objects.update_or_create(user_id=self.hab_user_id, defaults={
-                'api_key': enc_token,
+                'api_key': decrypt_text(self.api_token),
                 'username': self.username,
             })
 
@@ -76,7 +74,7 @@ class ToDoOversData:
         Returns:
             True for success, False for failure.
         """
-        headers = {'x-api-user': self.hab_user_id.encode('utf-8'), 'x-api-key': self.api_token.encode('utf-8')}
+        headers = {'x-api-user': self.hab_user_id.encode('utf-8'), 'x-api-key': decrypt_text(self.api_token)}
 
         req = requests.get('https://habitica.com/api/v3/user', headers=headers, data={
             'userFields': 'profile.name'
@@ -84,10 +82,9 @@ class ToDoOversData:
         if req.status_code == 200:
             req_json = req.json()
             self.username = req_json['data']['profile']['name']
-            enc_token = encrypt_text(self.api_token.encode('utf-8'))
 
             Users.objects.update_or_create(user_id=self.hab_user_id, defaults={
-                'api_key': enc_token,
+                'api_key': decrypt_text(self.api_token),
                 'username': self.username,
             })
 
@@ -103,7 +100,8 @@ class ToDoOversData:
         Returns:
             True for success, False for failure.
         """
-        headers = {'x-api-user': self.hab_user_id.encode('utf-8'), 'x-api-key': self.api_token.encode('utf-8')}
+        headers = {'x-api-user': self.hab_user_id.encode('utf-8'),
+                   'x-api-key': decrypt_text(self.api_token.encode('utf-8'))}
 
         if int(self.task_days) > 0:
             due_date = datetime.now() + timedelta(days=int(self.task_days))
