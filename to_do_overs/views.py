@@ -136,6 +136,7 @@ def create_task_action(request):
             session_class.task_name = task.name
             session_class.task_days = task.days
             session_class.priority = task.priority
+            request.session['session_data'] = jsonpickle.encode(session_class)
 
             if int(session_class.task_days) < 0:
                 messages.warning(request, 'Invalid repeat day number.')
@@ -202,7 +203,7 @@ def delete_task_confirm(request, task_pk):
         task_pk: the ID of the task to be deleted.
 
     Returns:
-        Renders dashboard page with error, or confirmation page to confirm deletion.
+        Redirects to dashboard with success or failure.
     """
     session_class = jsonpickle.decode(request.session['session_data'])
 
@@ -223,3 +224,85 @@ def delete_task_confirm(request, task_pk):
         messages.warning(request, 'You are not authorized to delete that task.')
         return redirect('to_do_overs:dashboard')
 
+
+def edit_task(request, task_pk):
+    """Edit a task.
+
+    Args:
+        request: the request from user.
+        task_pk: the ID of the task to be edited.
+
+    Returns:
+        Renders the edit screen for the task.
+    """
+    session_class = jsonpickle.decode(request.session['session_data'])
+
+    if not session_class.logged_in:
+        messages.warning(request, 'You need to log in to view that page.')
+        return redirect('to_do_overs:index')
+
+    # first we need to check that this user owns this task
+    task = Tasks.objects.get(pk=task_pk)
+    owner = Users.objects.get(pk=task.owner.pk)
+
+    logged_in_user = Users.objects.get(user_id=session_class.hab_user_id)
+    if logged_in_user.pk == owner.pk:
+        form = TasksForm(instance=task)
+        return render(request, 'to_do_overs/edit_task.html', {'form': form, 'task_pk': task_pk})
+    else:
+        messages.warning(request, 'You are not authorized to edit that task.')
+        return redirect('to_do_overs:dashboard')
+
+
+def edit_task_action(request, task_pk):
+    """Actually do the task edit.
+
+    Args:
+        request: the request from user.
+        task_pk: the ID of the task to be edited.
+
+    Returns:
+        Redirects to dashboard on success. Shows edit again on failure.
+    """
+    session_class = jsonpickle.decode(request.session['session_data'])
+
+    if not session_class.logged_in:
+        messages.warning(request, 'You need to log in to view that page.')
+        return redirect('to_do_overs:index')
+
+    # first we need to check that this user owns this task
+    task_lookup = Tasks.objects.get(pk=task_pk)
+    session_class.task_id = task_lookup.task_id
+    owner = Users.objects.get(pk=task_lookup.owner.pk)
+
+    logged_in_user = Users.objects.get(user_id=session_class.hab_user_id)
+    if logged_in_user.pk == owner.pk:
+        form = TasksForm(request.POST)
+        if form.is_valid():
+            task = form.save(commit=False)
+            # task.notes += "\n\n:repeat:Automatically created by ToDoOvers API tool."
+            # task.owner = Users.objects.get(user_id=session_class.hab_user_id)
+
+            session_class.notes = task.notes
+            session_class.task_name = task.name
+            session_class.task_days = task.days
+            session_class.priority = task.priority
+
+            request.session['session_data'] = jsonpickle.encode(session_class)
+
+            if int(session_class.task_days) < 0:
+                messages.warning(request, 'Invalid repeat day number.')
+                return redirect('to_do_overs:edit_task', task_pk)
+            if session_class.edit_task():
+                messages.success(request, 'Task edited successfully.')
+                task.task_id = session_class.task_id
+                task.owner = task_lookup.owner
+                Tasks.objects.filter(task_id=task.task_id).update(notes=task.notes, name=task.name,
+                                                                  days=task.days, priority=task.priority)
+                return redirect('to_do_overs:dashboard')
+            else:
+                messages.warning(request, 'Task editing failed.')
+                return redirect('to_do_overs:edit_task', task_pk)
+    else:
+        messages.warning(request, 'You are not authorized to edit that task.')
+        return redirect('to_do_overs:dashboard')

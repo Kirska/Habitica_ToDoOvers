@@ -32,11 +32,15 @@ Are you sure you want to delete this task?<br /><br />
         </tr>
     </table>
     <br/>
-<br /><br />
+    <br /><br />
 
-<a href="{% url 'to_do_overs:delete_task_confirm' task.pk %}">Yes, delete!</a>
+    <a href="{% url 'to_do_overs:delete_task_confirm' task.pk %}">Yes, delete!</a><br />
+    <a href="{% url 'to_do_overs:dashboard' %}">No, take me back.</a>
 
-<br /><br />
+    <br /><br />
+    If your task is still active on Habitica, it will stay there. This only deletes the tool's copy.
+    You'll need to also delete it on the Habitica app/site, if you wish.
+    <br /><br />
 {% endif %}
 
 

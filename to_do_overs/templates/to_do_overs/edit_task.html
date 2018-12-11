@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit ToDoOver Task</title>
+</head>
+<body>
+
+<h1>Habitica To-Do-Overs</h1>
+
+Edit task.<br />
+
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<form action="{% url 'to_do_overs:edit_task_action' task_pk %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    Your task will repeat upon completion, starting the day after completion, with a due date of the completion date
+    plus the number of days specified above.<br />
+    Your task's first due date will be today plus the number of days specified above. <br />
+    Alternatively, enter '0' and your to-do will not have a due date and the tool will recreate
+    it after you complete it. <br />
+    <input type="submit" value="Edit Task">
+</form>
+<br />
+<a href="{% url 'to_do_overs:dashboard' %}">Nevermind, go back.</a>
+<br /><br />
+</body>
+<footer><a href="{% url 'to_do_overs:logout' %}">Log Out</a></footer>
+</html>

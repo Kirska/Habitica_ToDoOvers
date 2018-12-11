@@ -132,3 +132,41 @@ class ToDoOversData:
                 return True
             else:
                 return False
+
+    def edit_task(self):
+        """Edit a task on Habitica.
+
+        Returns:
+            True for success, False for failure.
+        """
+        headers = {'x-api-user': self.hab_user_id.encode('utf-8'),
+                   'x-api-key': decrypt_text(self.api_token.encode('utf-8'))}
+        url = 'https://habitica.com/api/v3/tasks/' + str(self.task_id)
+
+        if int(self.task_days) > 0:
+            due_date = datetime.now() + timedelta(days=int(self.task_days))
+
+            req = requests.put(url, headers=headers, data={
+                'text': self.task_name,
+                'notes': self.notes,
+                'date': due_date,
+                'priority': self.priority,
+            })
+            if req.status_code == 200:
+                req_json = req.json()
+                self.task_id = req_json['data']['id']
+                return True
+            else:
+                return False
+        else:
+            req = requests.put(url, headers=headers, data={
+                'text': self.task_name,
+                'notes': self.notes,
+                'priority': self.priority,
+            })
+            if req.status_code == 200:
+                req_json = req.json()
+                self.task_id = req_json['data']['id']
+                return True
+            else:
+                return False
