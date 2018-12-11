@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+"""Django Views - Habitica To Do Over tool
+"""
 from __future__ import unicode_literals
 
 from django.shortcuts import render, redirect
@@ -10,12 +12,29 @@ import django.contrib.messages as messages
 import jsonpickle
 
 
-# Create your views here.
 def index(request):
+    """Homepage/Index View
+
+    Args:
+        request: the request from user.
+
+    Returns:
+        Rendering of the index page.
+    """
     return render(request, 'to_do_overs/index.html')
 
 
 def login(request):
+    """Login request with username and password.
+
+    This view will never actually be displayed.
+
+    Args:
+        request: the request from user.
+
+    Returns:
+        Redirects the index page on error. Redirects to the dashboard on success.
+    """
     session_class = ToDoOversData()
 
     session_class.username = request.POST['username']
@@ -26,10 +45,20 @@ def login(request):
         return redirect('to_do_overs:dashboard')
     else:
         messages.warning(request, 'Login failed.')
-        return render(request, 'to_do_overs/index.html')
+        return redirect('to_do_overs:index')
 
 
 def login_api_key(request):
+    """Login request with user ID and API token.
+
+    This view will never actually be displayed.
+
+    Args:
+        request: the request from user.
+
+    Returns:
+        Redirects the index page on error. Redirects to the dashboard on success.
+    """
     session_class = ToDoOversData()
 
     session_class.hab_user_id = request.POST['user_id']
@@ -44,6 +73,14 @@ def login_api_key(request):
 
 
 def dashboard(request):
+    """The dashboard view once a user has logged in.
+
+    Args:
+        request: the request from user.
+
+    Returns:
+        Renders the dashboard if user is logged in. Redirects to index if user is not logged in.
+    """
     session_class = jsonpickle.decode(request.session['session_data'])
     if session_class.logged_in:
         username = session_class.username
@@ -56,6 +93,14 @@ def dashboard(request):
 
 
 def create_task(request):
+    """View to create a new task.
+
+    Args:
+        request: the request from user.
+
+    Returns:
+        Renders the create task page if user is logged in. Redirects to index if user is logged out.
+    """
     session_class = jsonpickle.decode(request.session['session_data'])
     if session_class.logged_in:
         form = TasksForm()
@@ -66,6 +111,15 @@ def create_task(request):
 
 
 def create_task_action(request):
+    """Action to create task. This view is never displayed.
+
+    Args:
+        request: the request from user.
+
+    Returns:
+        Redirects to index if user is logged out. Otherwise attempts to create task. If creation is successful,
+        redirects to dashboard. If creation fails, redirect back to create task page.
+    """
     session_class = jsonpickle.decode(request.session['session_data'])
     if session_class.logged_in:
         form = TasksForm(request.POST)
@@ -96,5 +150,13 @@ def create_task_action(request):
 
 
 def logout(request):
+    """Logout and clear the session.
+
+    Args:
+        request: the request from user.
+
+    Returns:
+        Renders index page.
+    """
     request.session.flush()
     return render(request, 'to_do_overs/index.html')

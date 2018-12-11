@@ -1,5 +1,6 @@
-"""
-App controller functions for the Habitica To Do Over tool.
+"""Application controller code - Habitica To Do Over tool
+
+App controller functions for the Habitica To Do Over tool. For functions that don't fit in the model or views.
 """
 
 __author__ = "Katie Patterson kirska.com"
@@ -12,6 +13,21 @@ from datetime import datetime, timedelta
 
 
 class ToDoOversData:
+    """Session data and application functions that don't fall in models or views.
+
+    This class will be stored in a cookie for a login session.
+
+    Attributes:
+        username (str): Username from Habitica.
+        hab_user_id (str): User ID from Habitica.
+        api_token (str): API token from Habitica.
+        logged_in (bool): Goes to true once user has successfully logged in.
+        task_name (str): The name/title of the task being created.
+        task_days (int): The number of days that a task should last before expiring for the task being created.
+        task_id (str): The created task ID from Habitica.
+        priority (str): Difficulty of the task being created. See models.py for choices.
+        notes (str): The description/notes of the task being created.
+    """
     def __init__(self):
         self.username = ''
         self.hab_user_id = ''
@@ -25,11 +41,18 @@ class ToDoOversData:
         self.notes = ''
 
     def login(self, password):
+        """Login with a username and password to Habitica.
+
+        Args:
+            password: The password.
+
+        Returns:
+            True for success, False for failure.
+        """
         req = requests.post('https://habitica.com/api/v3/user/auth/local/login',
                             data={'username': self.username, 'password': password})
         if req.status_code == 200:
             req_json = req.json()
-            print req_json
             self.hab_user_id = req_json['data']['id']
             self.api_token = req_json['data']['apiToken']
             self.username = req_json['data']['username']
@@ -48,6 +71,11 @@ class ToDoOversData:
             return False
 
     def login_api_key(self):
+        """Login with user ID and API token to Habitica.
+
+        Returns:
+            True for success, False for failure.
+        """
         headers = {'x-api-user': self.hab_user_id.encode('utf-8'), 'x-api-key': self.api_token.encode('utf-8')}
 
         req = requests.get('https://habitica.com/api/v3/user', headers=headers, data={
@@ -70,6 +98,11 @@ class ToDoOversData:
             return False
 
     def create_task(self):
+        """Create a task on Habitica.
+
+        Returns:
+            True for success, False for failure.
+        """
         headers = {'x-api-user': self.hab_user_id.encode('utf-8'), 'x-api-key': self.api_token.encode('utf-8')}
 
         if int(self.task_days) > 0:

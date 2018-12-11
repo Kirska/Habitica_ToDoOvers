@@ -1,3 +1,5 @@
+"""Django URLs - Habitica To Do Over tool
+"""
 from Habitica_ToDoOvers.urls import url
 
 from . import views
