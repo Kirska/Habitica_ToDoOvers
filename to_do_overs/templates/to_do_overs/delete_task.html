@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create ToDoOver Task</title>
+</head>
+<body>
+
+<h1>Habitica To-Do-Overs</h1>
+
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+Are you sure you want to delete this task?<br /><br />
+
+{% if task %}
+    <table>
+        <tr>
+            <th>Task</th>
+            <th>Days</th>
+            <th>Difficulty</th>
+        </tr>
+        <tr>
+            <td>{{ task.name }}</td>
+            <td>{{ task.days }}</td>
+            <td>{{ task.get_priority_display }}</td>
+        </tr>
+    </table>
+    <br/>
+<br /><br />
+
+<a href="{% url 'to_do_overs:delete_task_confirm' task.pk %}">Yes, delete!</a>
+
+<br /><br />
+{% endif %}
+
+
+</body>
+<footer><a href="{% url 'to_do_overs:logout' %}">Log Out</a></footer>
+</html>

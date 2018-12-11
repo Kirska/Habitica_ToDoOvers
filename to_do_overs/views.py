@@ -171,10 +171,10 @@ def delete_task(request, task_pk):
 
     Args:
         request: the request from user.
-        task_id: the ID of the task to be deleted.
+        task_pk: the ID of the task to be deleted.
 
     Returns:
-        Renders dashboard page with error or success.
+        Renders dashboard page with error, or confirmation page to confirm deletion.
     """
     session_class = jsonpickle.decode(request.session['session_data'])
 
@@ -187,8 +187,34 @@ def delete_task(request, task_pk):
     owner = Users.objects.get(pk=task.owner.pk)
 
     logged_in_user = Users.objects.get(user_id=session_class.hab_user_id)
-    print logged_in_user
-    print owner
+    if logged_in_user.pk == owner.pk:
+        return render(request, 'to_do_overs/delete_task.html', {'task': task})
+    else:
+        messages.warning(request, 'You are not authorized to delete that task.')
+        return redirect('to_do_overs:dashboard')
+
+
+def delete_task_confirm(request, task_pk):
+    """Actually does the task deletion.
+
+    Args:
+        request: the request from user.
+        task_pk: the ID of the task to be deleted.
+
+    Returns:
+        Renders dashboard page with error, or confirmation page to confirm deletion.
+    """
+    session_class = jsonpickle.decode(request.session['session_data'])
+
+    if not session_class.logged_in:
+        messages.warning(request, 'You need to log in to view that page.')
+        return redirect('to_do_overs:index')
+
+    # first we need to check that this user owns this task
+    task = Tasks.objects.get(pk=task_pk)
+    owner = Users.objects.get(pk=task.owner.pk)
+
+    logged_in_user = Users.objects.get(user_id=session_class.hab_user_id)
     if logged_in_user.pk == owner.pk:
         task.delete()
         messages.success(request, 'Task deleted successfully.')
@@ -196,3 +222,4 @@ def delete_task(request, task_pk):
     else:
         messages.warning(request, 'You are not authorized to delete that task.')
         return redirect('to_do_overs:dashboard')
+
