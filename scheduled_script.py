@@ -38,7 +38,7 @@ for task in tasks:
             tdo_data.task_name = task.name
             tdo_data.task_days = task.days
 
-            if tdo_data.create_task():
+            if tdo_data.create_task(CIPHER_FILE_SCRIPT):
                 task.task_id = tdo_data.task_id
                 task.save()
             else:

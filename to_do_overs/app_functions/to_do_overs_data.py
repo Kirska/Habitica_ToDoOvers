@@ -6,7 +6,7 @@ App controller functions for the Habitica To Do Over tool. For functions that do
 __author__ = "Katie Patterson kirska.com"
 __license__ = "MIT"
 
-from cipher_functions import encrypt_text, decrypt_text
+from cipher_functions import encrypt_text, decrypt_text, CIPHER_FILE
 import requests
 from to_do_overs.models import Users, Tasks
 from datetime import datetime, timedelta
@@ -94,14 +94,14 @@ class ToDoOversData:
         else:
             return False
 
-    def create_task(self):
+    def create_task(self, cipher_file_path=CIPHER_FILE):
         """Create a task on Habitica.
 
         Returns:
             True for success, False for failure.
         """
         headers = {'x-api-user': self.hab_user_id.encode('utf-8'),
-                   'x-api-key': decrypt_text(self.api_token.encode('utf-8'))}
+                   'x-api-key': decrypt_text(self.api_token.encode('utf-8'), cipher_file_path)}
 
         if int(self.task_days) > 0:
             due_date = datetime.now() + timedelta(days=int(self.task_days))
