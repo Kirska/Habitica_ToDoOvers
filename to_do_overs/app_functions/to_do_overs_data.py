@@ -84,7 +84,7 @@ class ToDoOversData:
             self.username = req_json['data']['profile']['name']
 
             Users.objects.update_or_create(user_id=self.hab_user_id, defaults={
-                'api_key': decrypt_text(self.api_token),
+                'api_key': self.api_token,
                 'username': self.username,
             })
 
