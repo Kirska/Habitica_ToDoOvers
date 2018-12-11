@@ -19,9 +19,9 @@ def login(request):
     session_class = ToDoOversData()
 
     session_class.username = request.POST['username']
-    session_class.password = request.POST['password']
+    password = request.POST['password']
 
-    if session_class.login():
+    if session_class.login(password):
         request.session['session_data'] = jsonpickle.encode(session_class)
         return redirect('to_do_overs:dashboard')
     else:
@@ -71,7 +71,7 @@ def create_task_action(request):
         form = TasksForm(request.POST)
         if form.is_valid():
             task = form.save(commit=False)
-            task.notes += ":repeat:Automatically created by ToDoOvers API tool."
+            task.notes += "\n\n:repeat:Automatically created by ToDoOvers API tool."
             task.owner = Users.objects.get(user_id=session_class.hab_user_id)
 
             session_class.notes = task.notes

@@ -14,7 +14,6 @@ from datetime import datetime, timedelta
 class ToDoOversData:
     def __init__(self):
         self.username = ''
-        self.password = ''
         self.hab_user_id = ''
         self.api_token = ''
         self.logged_in = False
@@ -25,9 +24,9 @@ class ToDoOversData:
         self.priority = ''
         self.notes = ''
 
-    def login(self):
+    def login(self, password):
         req = requests.post('https://habitica.com/api/v3/user/auth/local/login',
-                            data={'username': self.username, 'password': self.password})
+                            data={'username': self.username, 'password': password})
         if req.status_code == 200:
             req_json = req.json()
             print req_json
