@@ -149,6 +149,9 @@ def create_task_action(request):
             else:
                 messages.warning(request, 'Task creation failed.')
                 return redirect('to_do_overs:create_task')
+        else:
+            messages.warning(request, 'Invalid form data.')
+            return redirect('to_do_overs:create_task')
     else:
         messages.warning(request, 'You need to log in to view that page.')
         return redirect('to_do_overs:index')
