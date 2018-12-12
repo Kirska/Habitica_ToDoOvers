@@ -30,7 +30,7 @@ class Tasks(models.Model):
         notes (str): The notes/description of the task.
         priority (str): Difficulty of task.
         days (int): Number of days until task expires from the creation.
-        owner (int/Foreign Key): The ID of the owner from the users model.
+        owner (int/Foreign Key): The owner from the users model.
     """
     task_id = models.CharField(max_length=255, unique=True)
     name = models.CharField(max_length=255)

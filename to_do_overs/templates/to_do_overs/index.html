@@ -2,11 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Habitica ToDoOvers</title>
+    <title>Habitica To-Do Overs</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'to_do_overs/style.css' %}">
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
 </head>
 <body>
-
-<h1>Habitica To-Do-Overs</h1>
+<div class="container">
+<h1 id="htdo-title">Habitica To-Do Overs</h1>
 
 {% if messages %}
   <ul class="messages">
@@ -16,27 +19,43 @@
   </ul>
 {% endif %}
 
-<h2>Login using Habitica email and password</h2>
+<h5>Login using Habitica email and password</h5>
 <form action="{% url 'to_do_overs:login' %}" method="post">
     {% csrf_token %}
-    Username: <input type="text" name="username"><br />
-    Password: <input type="password" name="password"><br />
-    <input type="submit" value="Login">
+    <div class="row">
+        <div class="six columns">
+            <label for="email-input">Email:</label>
+            <input class="u-full-width" type="text" name="username" id="email-input">
+        </div>
+        <div class="six columns">
+            <label for="password-input">Password:</label>
+            <input class="u-full-width" type="password" name="password" id="password-input">
+        </div>
+        <input class="button-primary" type="submit" value="Login">
+    </div>
 </form>
 
-<h2>Login using Habitica user ID and API token</h2>
+<h5>Login using Habitica user ID and API token</h5>
 <form action="{% url 'to_do_overs:login_api_key' %}" method="post">
     {% csrf_token %}
-    User ID: <input type="text" name="user_id"><br />
-    API Token: <input type="password" name="api_token"><br />
-    <input type="submit" value="Login">
+    <div class="row">
+        <div class="six columns">
+            <label for="id-input">User ID:</label>
+            <input class="u-full-width" type="text" name="user_id" id="id-input">
+        </div>
+        <div class="six columns">
+            <label for="token-input">API Token:</label>
+            <input class="u-full-width" type="password" name="api_token" id="token-input">
+        </div>
+        <input class="button-primary" type="submit" value="Login">
+    </div>
 </form>
 
 <br />
 <br />
 <b>Privacy info: </b>Your password is never stored. Your API token is encrypted before being stored.
-Your info will not be shared from this site, other than with Habitica directly.<br />
-Use of this tool will generate cookies.
+Your info will not be shared from this site, other than with Habitica directly. Use of this tool will generate cookies.
 
+</div>
 </body>
 </html>

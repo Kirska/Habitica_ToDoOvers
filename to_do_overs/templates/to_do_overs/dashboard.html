@@ -2,11 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Habitica ToDoOver Dashboard</title>
+    <title>Habitica To-Do Over Dashboard</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'to_do_overs/style.css' %}">
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
 </head>
 <body>
-
-<h1>Habitica To-Do-Overs</h1>
+<div class="container">
+<h1 id="htdo-title">Habitica To-Do Overs</h1>
 
 {% if messages %}
   <ul class="messages">
@@ -18,34 +21,39 @@
 
 Hello {{ username }}!<br /><br />
 
-Create a new To Do Over task <a href="{% url 'to_do_overs:create_task' %}">here</a>.
+Create a new To-Do Over task <a href="{% url 'to_do_overs:create_task' %}">here</a>.
 
 <br />
 <br />
 
 {% if tasks %}
-    The following tasks exist in the ToDoOver database:<br />
-    <table>
-        <tr>
-            <th>Task</th>
-            <th>Days</th>
-            <th>Difficulty</th>
-            <th>Edit</th>
-            <th>Delete</th>
-        </tr>
-    {% for task in tasks %}
-        <tr>
-            <td>{{ task.name }}</td>
-            <td>{{ task.days }}</td>
-            <td>{{ task.get_priority_display }}</td>
-            <td><a href="{% url 'to_do_overs:edit_task' task.pk %}">Edit</a></td>
-            <td><a href="{% url 'to_do_overs:delete_task' task.pk %}">Delete</a></td>
-        </tr>
-    {% endfor %}
+    The following tasks exist in the ToDoOver database:<br /><br />
+    <table class="u-full-width">
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th>Days</th>
+                <th>Difficulty</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for task in tasks %}
+            <tr>
+                <td>{{ task.name }}</td>
+                <td>{{ task.days }}</td>
+                <td>{{ task.get_priority_display }}</td>
+                <td><a href="{% url 'to_do_overs:edit_task' task.pk %}">Edit</a></td>
+                <td><a href="{% url 'to_do_overs:delete_task' task.pk %}">Delete</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
     </table>
     <br/>
 {% endif %}
-
+<a href="{% url 'to_do_overs:logout' %}">Log Out</a>
+</div>
 </body>
-<footer><a href="{% url 'to_do_overs:logout' %}">Log Out</a></footer>
+<footer></footer>
 </html>

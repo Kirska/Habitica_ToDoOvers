@@ -2,13 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Create ToDoOver Task</title>
+    <title>Create To-Do Over Task</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'to_do_overs/style.css' %}">
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
 </head>
 <body>
+<div class="container">
+<h1 id="htdo-title">Habitica To-Do Overs</h1>
 
-<h1>Habitica To-Do-Overs</h1>
-
-Create a new To Do Over task.<br />
+    <h5>Create a new To-Do Over task.</h5>
 
 {% if messages %}
   <ul class="messages">
@@ -20,15 +23,19 @@ Create a new To Do Over task.<br />
 
 <form action="{% url 'to_do_overs:create_task_action' %}" method="post">
     {% csrf_token %}
+
     {{ form.as_p }}
+
     Your task will repeat upon completion, starting the day after completion, with a due date of the completion date
     plus the number of days specified above.<br />
     Your task's first due date will be today plus the number of days specified above. <br />
-    Alternatively, enter '0' and your to-do will not have a due date and the tool will recreate
-    it after you complete it. <br />
-    <input type="submit" value="Make Task">
+    You can enter '0' to create a to-do task without a due date. <br />
+    <input class="button-primary" type="submit" value="Make Task">
 </form>
-
+<a href="{% url 'to_do_overs:dashboard' %}">Nevermind, go back.</a>
+<br /><br />
+<a href="{% url 'to_do_overs:logout' %}">Log Out</a>
+</div>
 </body>
-<footer><a href="{% url 'to_do_overs:logout' %}">Log Out</a></footer>
+<footer></footer>
 </html>
