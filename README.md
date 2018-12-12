@@ -3,10 +3,15 @@ The Habitica To-Do Overs project is an API tool created for [Habitica](https://h
 The tool is currently running at [this link](https://kirska.pythonanywhere.com). You can go there to actually use the tool.
 ### What is a To-Do Over?
 A To-Do Over is a To-Do task that automatically repeats upon completion.
+
 As an example, say you need to do laundry once a week, but you don't care what day of the week it gets done, and you'll need to do it every week. 
+
 Enter To-Do Overs. 
+
 You can create a To-Do Over task with a length of 7 days, and you can mark it complete anytime in that 7 day period, and when you do, the tool will automatically create a new to-do for laundry with 7 days from THAT date.
+
 *You can also create a task without a due date, and it will simply be recreated once it's marked completed.*
+
 Other than that, the tasks work exactly like the [built-in to-do tasks in Habitica](https://habitica.wikia.com/wiki/To-Dos).
 ### Creator
 The tool was built in Django (Python) by [Kirska](https://github.com/Kirska). This tool is in no way affiliated with Habitica.
