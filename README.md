@@ -24,6 +24,8 @@ The tool was built in Django (Python) by [Kirska](https://github.com/Kirska). Th
     * The current server is a free service provided by Python Anywhere. The task could be run more often than once a day with a paid plan but I'm cheap. If anyone would like to sponsor the server, please contact Kirska.
 * Can I run this locally?
     * The tool is a pretty standard Django app, with a scheduled Python script. If you'd like to run it on your local machine and not put your data on the interwebs, feel free to do so.
+* Can I get rid of that note that says "Automatically created by..."?
+    * Yes, if you edit your task on the tool you can get rid of that note.
 ## Ideas
 Here are some ideas for positive habits you can use this tool for:
 * Cleaning a room of your home (your bedroom, the kitchen, etc.)
