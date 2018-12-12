@@ -34,7 +34,7 @@ class Tasks(models.Model):
     """
     task_id = models.CharField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
-    notes = models.TextField()
+    notes = models.TextField(blank=True)
     TRIVIAL = '0.1'
     EASY = '1.0'
     MEDIUM = '1.5'
