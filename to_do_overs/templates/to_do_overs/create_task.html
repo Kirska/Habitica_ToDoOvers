@@ -28,8 +28,10 @@
 
     Your task will repeat upon completion, starting the day after completion, with a due date of the completion date
     plus the number of days specified above.<br />
-    Your task's first due date will be today plus the number of days specified above. <br />
-    You can enter '0' to create a to-do task without a due date. <br />
+    Your task's first due date will be today plus the length specified above. <br />
+    You can enter '0' to create a to-do task without a due date. <br /><br />
+    You can also delay the creation of your task after completion by "Delay" days. <br />
+    Enter a delay of '0' to have your task be created the day after you complete it. <br />
     <input class="button-primary" type="submit" value="Make Task">
 </form>
 <a href="{% url 'to_do_overs:dashboard' %}">Nevermind, go back.</a>

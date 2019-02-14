@@ -47,6 +47,7 @@ class Tasks(models.Model):
     )
     priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, blank=False, default=EASY)
     days = models.PositiveIntegerField(default=0)
+    delay = models.PositiveIntegerField(default=0)
     owner = models.ForeignKey(Users, on_delete=models.CASCADE)
 
     def __str__(self):

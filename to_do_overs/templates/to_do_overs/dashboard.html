@@ -32,7 +32,8 @@ Create a new To-Do Over task <a href="{% url 'to_do_overs:create_task' %}">here<
         <thead>
             <tr>
                 <th>Task</th>
-                <th>Days</th>
+                <th>Length (Days)</th>
+                <th>Delay (Days)</th>
                 <th>Difficulty</th>
                 <th>Edit</th>
                 <th>Delete</th>
@@ -43,6 +44,7 @@ Create a new To-Do Over task <a href="{% url 'to_do_overs:create_task' %}">here<
             <tr>
                 <td>{{ task.name }}</td>
                 <td>{{ task.days }}</td>
+                <td>{{ task.delay }}</td>
                 <td>{{ task.get_priority_display }}</td>
                 <td><a href="{% url 'to_do_overs:edit_task' task.pk %}">Edit</a></td>
                 <td><a href="{% url 'to_do_overs:delete_task' task.pk %}">Delete</a></td>
