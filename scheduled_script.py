@@ -8,6 +8,8 @@ __license__ = "MIT"
 
 import sys
 from Habitica_ToDoOvers.wsgi import application
+from datetime import datetime, timedelta
+import pytz
 
 from to_do_overs.models import Tasks
 import requests
@@ -29,8 +31,8 @@ for task in tasks:
 
     if req.status_code == 200:
         req_json = req.json()
-        if req_json['data']['completed']:
-            # Task was completed to recreate it
+        if req_json['data']['completed'] and task.delay == 0:
+            # Task was completed and there is no delay so recreate it
             tdo_data.hab_user_id = task.owner.user_id
             tdo_data.priority = task.priority
             tdo_data.api_token = task.owner.api_key
@@ -43,5 +45,37 @@ for task in tasks:
                 task.save()
             else:
                 pass
+        elif req_json['data']['completed']:
+            # Task was completed but has a delay
+            # Get completed date and set to UTC timezone
+            completed_date_naive = datetime.strptime(req_json['data']['dateCompleted'], '%Y-%m-%dT%H:%M:%S.%fZ')
+            utc_timezone = pytz.timezone("UTC")
+            completed_date_aware = utc_timezone.localize(completed_date_naive)
+            # Get current UTC time
+            utc_now = pytz.utc.localize(datetime.utcnow())
 
+            # Need to round the datetimes down to get rid of partial days
+            completed_date_aware = completed_date_aware.replace(hour=0, minute=0, second=0, microsecond=0)
+            utc_now = utc_now.replace(hour=0, minute=0, second=0, microsecond=0)
+
+            # TESTING - add days to current date
+            # utc_now = utc_now + timedelta(days=2)
+
+            elapsed_time = utc_now - completed_date_aware
+
+            # The delay we want is 1 + delay value
+            if elapsed_time.days > task.delay:
+                # Task was completed and the delay has passed
+                tdo_data.hab_user_id = task.owner.user_id
+                tdo_data.priority = task.priority
+                tdo_data.api_token = task.owner.api_key
+                tdo_data.notes = task.notes
+                tdo_data.task_name = task.name
+                tdo_data.task_days = task.days
+
+                if tdo_data.create_task(CIPHER_FILE_SCRIPT):
+                    task.task_id = tdo_data.task_id
+                    task.save()
+                else:
+                    pass
 
