@@ -303,7 +303,8 @@ def edit_task_action(request, task_pk):
                 task.task_id = session_class.task_id
                 task.owner = task_lookup.owner
                 Tasks.objects.filter(task_id=task.task_id).update(notes=task.notes, name=task.name,
-                                                                  days=task.days, priority=task.priority)
+                                                                  days=task.days, priority=task.priority,
+                                                                  delay=task.delay)
                 return redirect('to_do_overs:dashboard')
             else:
                 messages.warning(request, 'Task editing failed.')
