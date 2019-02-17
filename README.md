@@ -12,6 +12,8 @@ You can create a To-Do Over task with a length of 7 days, and you can mark it co
 
 *You can also create a task without a due date, and it will simply be recreated once it's marked completed.*
 
+You can also delay the re-creation of your task by a desired number of days.
+
 Other than that, the tasks work exactly like the [built-in to-do tasks in Habitica](https://habitica.wikia.com/wiki/To-Dos).
 ### Creator
 The tool was built in Django (Python) by [Kirska](https://github.com/Kirska). This tool is in no way affiliated with Habitica.
@@ -37,3 +39,5 @@ Here are some ideas for positive habits you can use this tool for:
 * Leg day at the gym
 ## Issues, Bugs, and Suggestions
 If you have any problems or suggestions please open an issue here or contact Kirska. Pull requests are also welcome.
+## Release Notes
+2/17/19 - Added ability to delay the re-creation of tasks.
