@@ -36,6 +36,7 @@ class ToDoOversData:
 
         self.task_name = ''
         self.task_days = 0
+        self.task_delay = 0
         self.task_id = ''
         self.priority = ''
         self.notes = ''

@@ -135,6 +135,7 @@ def create_task_action(request):
             session_class.notes = task.notes
             session_class.task_name = task.name
             session_class.task_days = task.days
+            session_class.task_delay = task.delay
             session_class.priority = task.priority
             request.session['session_data'] = jsonpickle.encode(session_class)
 
@@ -289,6 +290,7 @@ def edit_task_action(request, task_pk):
             session_class.notes = task.notes
             session_class.task_name = task.name
             session_class.task_days = task.days
+            session_class.task_delay = task.delay
             session_class.priority = task.priority
 
             request.session['session_data'] = jsonpickle.encode(session_class)
