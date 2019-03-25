@@ -75,10 +75,11 @@ class ToDoOversData:
         Returns:
             True for success, False for failure.
         """
-        headers = {'x-api-user': self.hab_user_id.encode('utf-8'), 'x-api-key': decrypt_text(self.api_token)}
+        headers = {'x-api-user': self.hab_user_id.encode('utf-8'), 'x-api-key': decrypt_text(self.api_token),
+                   'Content-Type': 'application/json'}
 
         req = requests.get('https://habitica.com/api/v3/user', headers=headers, data={
-            'userFields': 'profile.name'
+            #'userFields': 'profile.name'
         })
         if req.status_code == 200:
             req_json = req.json()
