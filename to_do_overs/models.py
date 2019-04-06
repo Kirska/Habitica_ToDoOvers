@@ -53,3 +53,12 @@ class Tasks(models.Model):
     def __str__(self):
         return str(self.pk) + ':' + str(self.name) + ':' + str(self.task_id)
 
+
+class Tags(models.Model):
+    tag_id = models.CharField(max_length=255, unique=True)
+    tag_text = models.CharField(max_length=255)
+
+    tasks = models.ManyToManyField(Tasks)
+
+    def __str__(self):
+        return str(self.pk) + ':' + str(self.tag_text)
