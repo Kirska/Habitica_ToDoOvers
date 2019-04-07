@@ -172,3 +172,25 @@ class ToDoOversData:
                 return True
             else:
                 return False
+
+    def get_user_tags(self, cipher_file_path=CIPHER_FILE):
+        """Get the list of a user's tags.
+
+        Returns:
+            Dict of tags for success, False for failure.
+        """
+        headers = {'x-api-user': self.hab_user_id.encode('utf-8'),
+                   'x-api-key': decrypt_text(self.api_token.encode('utf-8'), cipher_file_path)}
+
+        req = requests.get('https://habitica.com/api/v3/tags', headers=headers, data={})
+        if req.status_code == 200:
+            req_json = req.json()
+
+            print req_json
+
+            if len(req_json['data']) > 0:
+                return req_json['data']
+            else:
+                return False
+        else:
+            return False

@@ -108,7 +108,14 @@ def create_task(request):
     session_class = jsonpickle.decode(request.session['session_data'])
     if session_class.logged_in:
         form = TasksForm()
-        return render(request, 'to_do_overs/create_task.html', {'form': form})
+
+        # Get the user's tags
+        session_class = jsonpickle.decode(request.session['session_data'])
+        tags = session_class.get_user_tags()
+        if tags:
+            return render(request, 'to_do_overs/create_task.html', {'form': form, 'tags': tags})
+        else:
+            return render(request, 'to_do_overs/create_task.html', {'form': form})
     else:
         messages.warning(request, 'You need to log in to view that page.')
         return redirect('to_do_overs:index')
