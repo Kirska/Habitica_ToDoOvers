@@ -32,14 +32,6 @@
     You can enter '0' to create a to-do task without a due date. <br /><br />
     You can also delay the creation of your task after completion by "Delay" days. <br />
     Enter a delay of '0' to have your task be created the day after you complete it. <br />
-    {% if tags %}
-        <br />
-        <h5>Add Tags</h5>
-        {% for tag in tags %}
-            <label for="{{ tag.id }}">{{ tag.name }}:</label>
-            <input type="checkbox" value="{{ tag.id }}" id="{{ tag.id }}"><br />
-        {% endfor %}
-    {% endif %}
     <input class="button-primary" type="submit" value="Make Task">
 </form>
 <a href="{% url 'to_do_overs:dashboard' %}">Nevermind, go back.</a>

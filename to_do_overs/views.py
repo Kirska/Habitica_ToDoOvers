@@ -135,7 +135,13 @@ def create_task_action(request):
     if session_class.logged_in:
         form = TasksForm(request.POST)
         if form.is_valid():
-            task = form.save(commit=False)
+            task = Tasks()
+            task.name = form.data['name']
+            task.notes = form.data['notes']
+            task.days = form.data['days']
+            task.delay = form.data['delay']
+            task.priority = form.data['priority']
+
             task.notes += "\n\n:repeat:Automatically created by ToDoOvers API tool."
             task.owner = Users.objects.get(user_id=session_class.hab_user_id)
 

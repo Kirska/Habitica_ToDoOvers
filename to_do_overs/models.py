@@ -21,6 +21,14 @@ class Users(models.Model):
         return str(self.pk) + ':' + str(self.user_id) + ':' + str(self.username)
 
 
+class Tags(models.Model):
+    tag_id = models.CharField(max_length=255, unique=True)
+    tag_text = models.CharField(max_length=255)
+
+    def __str__(self):
+        return str(self.pk) + ':' + str(self.tag_text)
+
+
 class Tasks(models.Model):
     """Model for the tasks created by users.
 
@@ -50,15 +58,10 @@ class Tasks(models.Model):
     delay = models.PositiveIntegerField(default=0)
     owner = models.ForeignKey(Users, on_delete=models.CASCADE)
 
+    tags = models.ManyToManyField(Tags)
+
     def __str__(self):
         return str(self.pk) + ':' + str(self.name) + ':' + str(self.task_id)
 
 
-class Tags(models.Model):
-    tag_id = models.CharField(max_length=255, unique=True)
-    tag_text = models.CharField(max_length=255)
 
-    tasks = models.ManyToManyField(Tasks)
-
-    def __str__(self):
-        return str(self.pk) + ':' + str(self.tag_text)
