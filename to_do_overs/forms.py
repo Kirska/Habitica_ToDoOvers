@@ -14,5 +14,7 @@ class TasksForm(forms.Form):
     days = forms.IntegerField()
     delay = forms.IntegerField()
 
+    task_tags = forms.MultipleChoiceField(required=False)
 
-
+    def set_tags(self, tags_in):
+        self.fields['task_tags'].choices = tags_in
