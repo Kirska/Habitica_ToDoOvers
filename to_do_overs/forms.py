@@ -14,7 +14,7 @@ class TasksForm(forms.Form):
     days = forms.IntegerField()
     delay = forms.IntegerField()
 
-    tags = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), required=False)
+    tags = forms.MultipleChoiceField(required=False)
 
     def __init__(self, *args, **kwargs):
         args_super = args[1:]
@@ -28,5 +28,5 @@ class TasksForm(forms.Form):
         for tag in Tags.objects.filter(tag_owner=user):
             choices.append((tag.tag_id, tag.tag_text))
 
-        self.fields['tags'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), required=False,
+        self.fields['tags'] = forms.MultipleChoiceField(required=False,
                                                         choices=choices)

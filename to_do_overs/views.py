@@ -146,6 +146,8 @@ def create_task_action(request):
             task.notes += "\n\n:repeat:Automatically created by ToDoOvers API tool."
             task.owner = Users.objects.get(user_id=session_class.hab_user_id)
 
+            session_class.tags = request.POST.getlist('tags')
+
             session_class.notes = task.notes
             session_class.task_name = task.name
             session_class.task_days = task.days
@@ -159,6 +161,9 @@ def create_task_action(request):
             if session_class.create_task():
                 messages.success(request, 'Task created successfully.')
                 task.task_id = session_class.task_id
+
+                # add tags
+
                 task.save()
                 return redirect('to_do_overs:dashboard')
             else:

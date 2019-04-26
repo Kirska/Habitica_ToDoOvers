@@ -116,6 +116,7 @@ class ToDoOversData:
                 'notes': self.notes,
                 'date': due_date,
                 'priority': self.priority,
+                'tags': self.tags,
             })
             if req.status_code == 201:
                 req_json = req.json()
@@ -129,6 +130,7 @@ class ToDoOversData:
                 'type': 'todo',
                 'notes': self.notes,
                 'priority': self.priority,
+                'tags': self.tags,
             })
             if req.status_code == 201:
                 req_json = req.json()
