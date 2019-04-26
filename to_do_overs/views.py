@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from app_functions.to_do_overs_data import ToDoOversData
 from forms import TasksForm
-from models import Users, Tasks
+from models import Users, Tasks, Tags
 import django.contrib.messages as messages
 import jsonpickle
 from app_functions.cipher_functions import encrypt_text
@@ -162,9 +162,13 @@ def create_task_action(request):
                 messages.success(request, 'Task created successfully.')
                 task.task_id = session_class.task_id
 
-                # add tags
-
                 task.save()
+
+                # add tags
+                for tag in session_class.tags:
+                    tag_object = Tags.objects.get(tag_id=tag)
+                    task.tags.add(tag_object)
+
                 return redirect('to_do_overs:dashboard')
             else:
                 messages.warning(request, 'Task creation failed.')
