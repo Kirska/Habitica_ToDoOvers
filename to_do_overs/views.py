@@ -112,13 +112,7 @@ def create_task(request):
         session_class = jsonpickle.decode(request.session['session_data'])
         tags = session_class.get_user_tags()
 
-        tags_tuple = ()
-        for tag in tags:
-            tag_tuple = (tag['id'], tag['name'])
-            tags_tuple = (tag_tuple,) + tags_tuple
-
-        form = TasksForm()
-        form.set_tags(tags_tuple)
+        form = TasksForm(session_class.hab_user_id)
 
         return render(request, 'to_do_overs/create_task.html', {'form': form})
 
@@ -139,11 +133,7 @@ def create_task_action(request):
     """
     session_class = jsonpickle.decode(request.session['session_data'])
     if session_class.logged_in:
-        form = TasksForm(request.POST)
-
-        # fix to get the form to validate
-        task_tags = request.POST.get('task_tags')
-        form.fields['task_tags'].choices = [(task_tags, task_tags)]
+        form = TasksForm(session_class.hab_user_id, request.POST)
 
         if form.is_valid():
             task = Tasks()

@@ -24,6 +24,7 @@ class Users(models.Model):
 class Tags(models.Model):
     tag_id = models.CharField(max_length=255, unique=True)
     tag_text = models.CharField(max_length=255)
+    tag_owner = models.ForeignKey(Users, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.pk) + ':' + str(self.tag_text)

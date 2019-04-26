@@ -1,7 +1,7 @@
 """Django Forms - Habitica To Do Over tool
 """
 from django import forms
-from .models import Tasks
+from .models import Tasks, Tags, Users
 
 
 class TasksForm(forms.Form):
@@ -14,7 +14,19 @@ class TasksForm(forms.Form):
     days = forms.IntegerField()
     delay = forms.IntegerField()
 
-    task_tags = forms.MultipleChoiceField(required=False)
+    tags = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), required=False)
 
-    def set_tags(self, tags_in):
-        self.fields['task_tags'].choices = tags_in
+    def __init__(self, *args, **kwargs):
+        args_super = args[1:]
+        user_id = args[0]
+
+        super(TasksForm, self).__init__(*args_super, **kwargs)
+
+        user = Users.objects.get(user_id=user_id)
+
+        choices = []
+        for tag in Tags.objects.filter(tag_owner=user):
+            choices.append((tag.tag_id, tag.tag_text))
+
+        self.fields['tags'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), required=False,
+                                                        choices=choices)

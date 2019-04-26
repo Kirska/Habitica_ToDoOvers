@@ -8,7 +8,7 @@ __license__ = "MIT"
 
 from cipher_functions import encrypt_text, decrypt_text, CIPHER_FILE
 import requests
-from to_do_overs.models import Users, Tasks
+from to_do_overs.models import Users, Tasks, Tags
 from datetime import datetime, timedelta
 
 
@@ -27,12 +27,14 @@ class ToDoOversData:
         task_id (str): The created task ID from Habitica.
         priority (str): Difficulty of the task being created. See models.py for choices.
         notes (str): The description/notes of the task being created.
+        tags (list): The user's tags.
     """
     def __init__(self):
         self.username = ''
         self.hab_user_id = ''
         self.api_token = ''
         self.logged_in = False
+        self.tags = []
 
         self.task_name = ''
         self.task_days = 0
@@ -186,9 +188,15 @@ class ToDoOversData:
         if req.status_code == 200:
             req_json = req.json()
 
-            print req_json
+            user = Users.objects.get(user_id=self.hab_user_id)
 
             if len(req_json['data']) > 0:
+                # Add/update tags in database
+                for tag_json in req_json['data']:
+                    Tags.objects.update_or_create(tag_owner=user,
+                                                  tag_id=tag_json['id'].encode('utf-8'),
+                                                  tag_text=tag_json['name'].encode('utf-8'))
+
                 return req_json['data']
             else:
                 return False
