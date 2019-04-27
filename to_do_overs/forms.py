@@ -20,11 +20,7 @@ class TasksModelForm(forms.ModelForm):
         # get the list of tags for that user
         user = Users.objects.get(user_id=user_id)
 
-        choices = []
-        for tag in Tags.objects.filter(tag_owner=user):
-            choices.append((tag.tag_id, tag.tag_text))
-        
         self.fields['tags'] = forms.ModelMultipleChoiceField(required=False,
                                                              queryset=Tags.objects.filter(tag_owner=user))
 
-        # select the tags for this task if needed
+
