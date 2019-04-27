@@ -41,3 +41,4 @@ Here are some ideas for positive habits you can use this tool for:
 If you have any problems or suggestions please open an issue here or contact Kirska. Pull requests are also welcome.
 ## Release Notes
 2/17/19 - Added ability to delay the re-creation of tasks.
+4/27/19 - Added tags
