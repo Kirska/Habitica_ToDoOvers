@@ -281,6 +281,9 @@ def edit_task(request, task_pk):
 
     logged_in_user = Users.objects.get(user_id=session_class.hab_user_id)
     if logged_in_user.pk == owner.pk:
+        # get the user's tags
+        session_class.get_user_tags()
+
         form = TasksModelForm(session_class.hab_user_id, instance=task)
         return render(request, 'to_do_overs/edit_task.html', {'form': form, 'task_pk': task_pk})
     else:
@@ -311,7 +314,7 @@ def edit_task_action(request, task_pk):
 
     logged_in_user = Users.objects.get(user_id=session_class.hab_user_id)
     if logged_in_user.pk == owner.pk:
-        form = TasksForm(request.POST)
+        form = TasksModelForm(session_class.hab_user_id, request.POST)
         if form.is_valid():
             task = form.save(commit=False)
             # task.notes += "\n\n:repeat:Automatically created by ToDoOvers API tool."
@@ -322,6 +325,15 @@ def edit_task_action(request, task_pk):
             session_class.task_days = task.days
             session_class.task_delay = task.delay
             session_class.priority = task.priority
+
+            # convert tags from their DB ID to the tag UUID
+            tags = request.POST.getlist('tags')
+            tag_query_list = Tags.objects.filter(pk__in=set(tags)).values('tag_id')
+            tag_list = []
+            for tag in tag_query_list:
+                tag_list.append(tag['tag_id'])
+
+            session_class.tags = tag_list
 
             request.session['session_data'] = jsonpickle.encode(session_class)
 
@@ -335,6 +347,14 @@ def edit_task_action(request, task_pk):
                 Tasks.objects.filter(task_id=task.task_id).update(notes=task.notes, name=task.name,
                                                                   days=task.days, priority=task.priority,
                                                                   delay=task.delay)
+
+                task_object = Tasks.objects.get(task_id=task.task_id)
+                # clear the tags
+                task_object.tags.clear()
+                # re-add the tags
+                for tag in tags:
+                    task_object.tags.add(tag)
+
                 return redirect('to_do_overs:dashboard')
             else:
                 messages.warning(request, 'Task editing failed.')
