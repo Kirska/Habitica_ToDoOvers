@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render, redirect
 from app_functions.to_do_overs_data import ToDoOversData
-from forms import TasksForm, TasksModelForm
+from forms import TasksModelForm
 from models import Users, Tasks, Tags
 import django.contrib.messages as messages
 import jsonpickle
