@@ -4,29 +4,27 @@ from django import forms
 from .models import Tasks, Tags, Users
 
 
-class TasksForm(forms.Form):
-    name = forms.CharField(max_length=255)
-    notes = forms.CharField(
-        max_length=1000,
-        widget=forms.Textarea()
-    )
-    priority = forms.ChoiceField(choices=Tasks.PRIORITY_CHOICES)
-    days = forms.IntegerField()
-    delay = forms.IntegerField()
+class TasksModelForm(forms.ModelForm):
+    class Meta:
+        model = Tasks
+        fields = ['name', 'notes', 'priority', 'days', 'delay', 'tags']
 
-    tags = forms.MultipleChoiceField(required=False)
+    tags = forms.ModelMultipleChoiceField(queryset=Tags.objects.all())
 
     def __init__(self, *args, **kwargs):
         args_super = args[1:]
         user_id = args[0]
 
-        super(TasksForm, self).__init__(*args_super, **kwargs)
+        super(TasksModelForm, self).__init__(*args_super, **kwargs)
 
+        # get the list of tags for that user
         user = Users.objects.get(user_id=user_id)
 
         choices = []
         for tag in Tags.objects.filter(tag_owner=user):
             choices.append((tag.tag_id, tag.tag_text))
+        
+        self.fields['tags'] = forms.ModelMultipleChoiceField(required=False,
+                                                             queryset=Tags.objects.filter(tag_owner=user))
 
-        self.fields['tags'] = forms.MultipleChoiceField(required=False,
-                                                        choices=choices)
+        # select the tags for this task if needed

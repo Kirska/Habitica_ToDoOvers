@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render, redirect
 from app_functions.to_do_overs_data import ToDoOversData
-from forms import TasksForm
+from forms import TasksForm, TasksModelForm
 from models import Users, Tasks, Tags
 import django.contrib.messages as messages
 import jsonpickle
@@ -110,9 +110,9 @@ def create_task(request):
     if session_class.logged_in:
         # Get the user's tags
         session_class = jsonpickle.decode(request.session['session_data'])
-        tags = session_class.get_user_tags()
+        session_class.get_user_tags()
 
-        form = TasksForm(session_class.hab_user_id)
+        form = TasksModelForm(session_class.hab_user_id)
 
         return render(request, 'to_do_overs/create_task.html', {'form': form})
 
@@ -133,7 +133,7 @@ def create_task_action(request):
     """
     session_class = jsonpickle.decode(request.session['session_data'])
     if session_class.logged_in:
-        form = TasksForm(session_class.hab_user_id, request.POST)
+        form = TasksModelForm(session_class.hab_user_id, request.POST)
 
         if form.is_valid():
             task = Tasks()
@@ -146,7 +146,14 @@ def create_task_action(request):
             task.notes += "\n\n:repeat:Automatically created by ToDoOvers API tool."
             task.owner = Users.objects.get(user_id=session_class.hab_user_id)
 
-            session_class.tags = request.POST.getlist('tags')
+            # convert tags from their DB ID to the tag UUID
+            tags = request.POST.getlist('tags')
+            tag_query_list = Tags.objects.filter(pk__in=set(tags)).values('tag_id')
+            tag_list = []
+            for tag in tag_query_list:
+                tag_list.append(tag['tag_id'])
+
+            session_class.tags = tag_list
 
             session_class.notes = task.notes
             session_class.task_name = task.name
@@ -274,7 +281,7 @@ def edit_task(request, task_pk):
 
     logged_in_user = Users.objects.get(user_id=session_class.hab_user_id)
     if logged_in_user.pk == owner.pk:
-        form = TasksForm(instance=task)
+        form = TasksModelForm(session_class.hab_user_id, instance=task)
         return render(request, 'to_do_overs/edit_task.html', {'form': form, 'task_pk': task_pk})
     else:
         messages.warning(request, 'You are not authorized to edit that task.')

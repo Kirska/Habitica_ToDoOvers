@@ -27,7 +27,7 @@ class Tags(models.Model):
     tag_owner = models.ForeignKey(Users, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.pk) + ':' + str(self.tag_text)
+        return str(self.tag_text)
 
 
 class Tasks(models.Model):
