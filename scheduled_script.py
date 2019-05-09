@@ -41,10 +41,9 @@ for task in tasks:
             tdo_data.task_days = task.days
 
             # convert tags from their DB ID to the tag UUID
-            tag_query_list = Tags.objects.filter(tag_owner=task.owner).values('tag_id')
             tag_list = []
-            for tag in tag_query_list:
-                tag_list.append(tag['tag_id'])
+            for tag in task.tags.all():
+                tag_list.append(tag.tag_id)
 
             tdo_data.tags = tag_list
 
@@ -81,14 +80,12 @@ for task in tasks:
                 tdo_data.task_name = task.name
                 tdo_data.task_days = task.days
 
-                tags = task.tags
                 # convert tags from their DB ID to the tag UUID
-                tag_query_list = Tags.objects.filter(pk__in=set(tags)).values('tag_id')
                 tag_list = []
-                for tag in tag_query_list:
-                    tag_list.append(tag['tag_id'])
+                for tag in task.tags.all():
+                    tag_list.append(tag.tag_id)
 
-                tdo_data.tags = tags
+                tdo_data.tags = tag_list
 
                 if tdo_data.create_task(CIPHER_FILE_SCRIPT):
                     task.task_id = tdo_data.task_id
