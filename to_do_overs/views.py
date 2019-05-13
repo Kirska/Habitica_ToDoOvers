@@ -10,6 +10,7 @@ from models import Users, Tasks, Tags
 import django.contrib.messages as messages
 import jsonpickle
 from app_functions.cipher_functions import encrypt_text
+from django.http import HttpResponseServerError
 import json
 
 
@@ -43,6 +44,7 @@ def login(request):
 
     if session_class.login(password):
         request.session['session_data'] = jsonpickle.encode(session_class)
+        request.session.create()
         return redirect('to_do_overs:dashboard')
     else:
         messages.warning(request, 'Login failed.')
@@ -67,6 +69,7 @@ def login_api_key(request):
 
     if session_class.login_api_key():
         request.session['session_data'] = jsonpickle.encode(session_class)
+        request.session.create()
         return redirect('to_do_overs:dashboard')
     else:
         messages.warning(request, 'Login failed.')
@@ -362,3 +365,7 @@ def edit_task_action(request, task_pk):
     else:
         messages.warning(request, 'You are not authorized to edit that task.')
         return redirect('to_do_overs:dashboard')
+
+
+def test_500_view(request):
+    return HttpResponseServerError()
