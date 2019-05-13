@@ -197,9 +197,10 @@ class ToDoOversData:
             if len(req_json['data']) > 0:
                 # Add/update tags in database
                 for tag_json in req_json['data']:
-                    Tags.objects.update_or_create(tag_owner=user,
-                                                  tag_id=tag_json['id'].encode('utf-8'),
-                                                  tag_text=tag_json['name'].encode('utf-8'))
+                    Tags.objects.update_or_create(
+                        tag_id=tag_json['id'].encode('utf-8'),
+                        defaults={'tag_owner': user,
+                                  'tag_text': tag_json['name'].encode('utf-8')})
 
                 return req_json['data']
             else:
