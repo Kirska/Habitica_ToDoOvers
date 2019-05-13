@@ -85,7 +85,11 @@ def dashboard(request):
     Returns:
         Renders the dashboard if user is logged in. Redirects to index if user is not logged in.
     """
-    session_class = jsonpickle.decode(request.session['session_data'])
+    if 'session_data' in request.session:
+        session_class = jsonpickle.decode(request.session['session_data'])
+    else:
+        messages.warning(request, 'Please log in again.')
+        return redirect('to_do_overs:index')
 
     task_list = Tasks.objects.filter(owner__user_id=session_class.hab_user_id)
 
@@ -109,7 +113,12 @@ def create_task(request):
     Returns:
         Renders the create task page if user is logged in. Redirects to index if user is logged out.
     """
-    session_class = jsonpickle.decode(request.session['session_data'])
+    if 'session_data' in request.session:
+        session_class = jsonpickle.decode(request.session['session_data'])
+    else:
+        messages.warning(request, 'Please log in again.')
+        return redirect('to_do_overs:index')
+
     if session_class.logged_in:
         # Get the user's tags
         session_class = jsonpickle.decode(request.session['session_data'])
@@ -214,7 +223,11 @@ def delete_task(request, task_pk):
     Returns:
         Renders dashboard page with error, or confirmation page to confirm deletion.
     """
-    session_class = jsonpickle.decode(request.session['session_data'])
+    if 'session_data' in request.session:
+        session_class = jsonpickle.decode(request.session['session_data'])
+    else:
+        messages.warning(request, 'Please log in again.')
+        return redirect('to_do_overs:index')
 
     if not session_class.logged_in:
         messages.warning(request, 'You need to log in to view that page.')
@@ -242,7 +255,11 @@ def delete_task_confirm(request, task_pk):
     Returns:
         Redirects to dashboard with success or failure.
     """
-    session_class = jsonpickle.decode(request.session['session_data'])
+    if 'session_data' in request.session:
+        session_class = jsonpickle.decode(request.session['session_data'])
+    else:
+        messages.warning(request, 'Please log in again.')
+        return redirect('to_do_overs:index')
 
     if not session_class.logged_in:
         messages.warning(request, 'You need to log in to view that page.')
@@ -272,7 +289,11 @@ def edit_task(request, task_pk):
     Returns:
         Renders the edit screen for the task.
     """
-    session_class = jsonpickle.decode(request.session['session_data'])
+    if 'session_data' in request.session:
+        session_class = jsonpickle.decode(request.session['session_data'])
+    else:
+        messages.warning(request, 'Please log in again.')
+        return redirect('to_do_overs:index')
 
     if not session_class.logged_in:
         messages.warning(request, 'You need to log in to view that page.')
