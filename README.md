@@ -43,3 +43,5 @@ If you have any problems or suggestions please open an issue here or contact Kir
 2/17/19 - Added ability to delay the re-creation of tasks.
 
 4/27/19 - Added tags
+
+5/14/19 - Finalized some bug fixes with the tags feature
