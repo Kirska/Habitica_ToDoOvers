@@ -80,7 +80,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'habitica_tdo',
         'USER': 'habitica_tdo',
-        'PASSWORD': 'password',
+        'PASSWORD': 'x6c9bNWhBvgfj5',
         'HOST': 'localhost',
         'PORT': '3306',
     }

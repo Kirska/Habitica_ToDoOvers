@@ -8,6 +8,5 @@ db.sqlite3
 to_do_overs/migrations/
 
 venv/
-venv27/
 
 cipher.bin
