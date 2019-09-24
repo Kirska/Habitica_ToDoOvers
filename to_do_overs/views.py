@@ -39,8 +39,8 @@ def login(request):
     """
     session_class = ToDoOversData()
 
-    session_class.username = request.POST['username']
-    password = request.POST['password']
+    session_class.username = request.POST.get('username', False)
+    password = request.POST.get('password', False)
 
     if session_class.login(password):
         request.session['session_data'] = jsonpickle.encode(session_class)
@@ -64,8 +64,8 @@ def login_api_key(request):
     """
     session_class = ToDoOversData()
 
-    session_class.hab_user_id = request.POST['user_id']
-    session_class.api_token = encrypt_text(request.POST['api_token'].encode('utf-8'))
+    session_class.hab_user_id = request.POST.get('user_id', False)
+    session_class.api_token = encrypt_text(request.POST.get('api_token', False).encode('utf-8'))
 
     if session_class.login_api_key():
         request.session['session_data'] = jsonpickle.encode(session_class)
