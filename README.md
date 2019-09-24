@@ -45,3 +45,5 @@ If you have any problems or suggestions please open an issue here or contact Kir
 4/27/19 - Added tags
 
 5/14/19 - Finalized some bug fixes with the tags feature
+
+9/24/19 - Fixed a bug causing an error on login occasionally
