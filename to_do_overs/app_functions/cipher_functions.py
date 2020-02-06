@@ -8,7 +8,7 @@ __license__ = "MIT"
 
 import argparse
 from cryptography.fernet import Fernet
-from to_do_overs.app_functions.local_defines import CIPHER_FILE
+from local_defines import CIPHER_FILE
 
 
 def generate_cipher_key():
@@ -68,9 +68,9 @@ def test_cipher(test_text):
         test_text: some plain text we want to test encrypting and decrypting.
     """
     cipher_text = encrypt_text(test_text)
-    print(cipher_text)
+    print cipher_text
     plain_text = decrypt_text(cipher_text)
-    print(plain_text)
+    print plain_text
 
 """
 parser = argparse.ArgumentParser(description='Generate a cipher.')
