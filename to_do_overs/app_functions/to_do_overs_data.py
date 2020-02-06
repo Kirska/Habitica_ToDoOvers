@@ -6,7 +6,7 @@ App controller functions for the Habitica To Do Over tool. For functions that do
 __author__ = "Katie Patterson kirska.com"
 __license__ = "MIT"
 
-from cipher_functions import encrypt_text, decrypt_text, CIPHER_FILE
+from to_do_overs.app_functions.cipher_functions import encrypt_text, decrypt_text, CIPHER_FILE
 import requests
 from to_do_overs.models import Users, Tasks, Tags
 from datetime import datetime, timedelta
