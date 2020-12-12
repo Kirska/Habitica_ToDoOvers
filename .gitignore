@@ -11,3 +11,5 @@ venv/
 venv27/
 
 cipher.bin
+
+Habitica_ToDoOvers/settings.py
