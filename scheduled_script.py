@@ -16,7 +16,10 @@ import requests
 from to_do_overs.app_functions.cipher_functions import decrypt_text, CIPHER_FILE
 from to_do_overs.app_functions.to_do_overs_data import ToDoOversData
 
-CIPHER_FILE_SCRIPT = CIPHER_FILE
+#for production
+CIPHER_FILE_SCRIPT = 'Habitica_ToDoOvers/to_do_overs/app_functions/cipher.bin'
+#for testing
+#CIPHER_FILE_SCRIPT = 'to_do_overs/app_functions/cipher.bin'
 
 tasks = Tasks.objects.all()
 
@@ -51,7 +54,7 @@ for task in tasks:
                 task.task_id = tdo_data.task_id
                 task.save()
             else:
-                pass
+                print 'task creation failed ' + task.task_id
         elif req_json['data']['completed']:
             # Task was completed but has a delay
             # Get completed date and set to UTC timezone
@@ -91,5 +94,27 @@ for task in tasks:
                     task.task_id = tdo_data.task_id
                     task.save()
                 else:
-                    pass
+                    print 'task creation failed ' + task.task_id
+        else:
+            print 'task ' + task.task_id + ' not completed or delay not met'
+    else:
+        try:
+            print '\n' + str(req.status_code)
+            print req.text
+            print 'task name ' + task.name
+            print 'task id ' + task.task_id
+            print 'task delay ' + str(task.delay) + '\n'
+        except:
+            print 'task failed with unicode errors'
+
+        #headers = {'x-api-user': task.owner.user_id.encode('utf-8'),
+        #           'x-api-key': decrypt_text(task.owner.api_key.encode('utf-8'), CIPHER_FILE_SCRIPT)}
+
+        #req = requests.get('https://habitica.com/api/v3/tasks/user?type=todos', headers=headers, data={})
+
+        #print req.status_code
+        #print req.json()
+
+        #quit()
+
 
