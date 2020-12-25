@@ -8,7 +8,7 @@ from __future__ import absolute_import
 __author__ = "Katie Patterson kirska.com"
 __license__ = "MIT"
 
-import argparse
+# import argparse
 from cryptography.fernet import Fernet
 from .local_defines import CIPHER_FILE
 
@@ -16,7 +16,8 @@ from .local_defines import CIPHER_FILE
 def generate_cipher_key():
     """Generates a cipher key.
 
-    Generates a cipher key to be used for storing sensitive data in the database.
+    Generates a cipher key to be used for storing
+    sensitive data in the database.
     This will make all existing data GARBAGE so use with caution.
     """
     key = Fernet.generate_key()
@@ -64,7 +65,8 @@ def decrypt_text(cipher_text, cipher_file_path=CIPHER_FILE):
 def test_cipher(test_text):
     """Test the cipher functions.
 
-    Encrypt and then decrypt some text using the cipher stored in the cipher file.
+    Encrypt and then decrypt some text using the cipher stored
+    in the cipher file.
 
     Args:
         test_text: some plain text we want to test encrypting and decrypting.
@@ -74,10 +76,12 @@ def test_cipher(test_text):
     plain_text = decrypt_text(cipher_text)
     print(plain_text)
 
+
 """
 parser = argparse.ArgumentParser(description='Generate a cipher.')
 parser.add_argument('--generate', action='store_true',
-                    help='generate a new cipher and store in a file USE WITH CAUTION')
+                    help='generate a new cipher' +
+                    'and store in a file USE WITH CAUTION')
 parser.add_argument('--test', help='test your existing cipher')
 
 args = parser.parse_args()

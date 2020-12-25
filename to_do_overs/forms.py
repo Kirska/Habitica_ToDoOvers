@@ -19,13 +19,19 @@ class TasksModelForm(forms.ModelForm):
         super(TasksModelForm, self).__init__(*args_super, **kwargs)
 
         # make fields more explanatory
-        self.fields['days'].label = u'Number of days allotted to complete task (enter 0 for no due date)'
-        self.fields['delay'].label = u'Number of days to delay before re-creating task (enter 0 for no delay)'
+        self.fields['days'].label = (
+            u'Number of days allotted to complete task' +
+            u' (enter 0 for no due date)'
+        )
+        self.fields['delay'].label = (
+            u'Number of days to delay before re-creating' +
+            u' task (enter 0 for no delay)'
+        )
 
         # get the list of tags for that user
         user = Users.objects.get(user_id=user_id)
 
-        self.fields['tags'] = forms.ModelMultipleChoiceField(required=False,
-                                                             queryset=Tags.objects.filter(tag_owner=user))
-
-
+        self.fields['tags'] = forms.ModelMultipleChoiceField(
+            required=False,
+            queryset=Tags.objects.filter(tag_owner=user)
+        )

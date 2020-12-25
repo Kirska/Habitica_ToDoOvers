@@ -19,7 +19,16 @@ class Users(models.Model):
     username = models.CharField(max_length=255)
 
     def __str__(self):
-        return str(self.pk) + ':' + str(self.user_id) + ':' + str(self.username)
+        return (
+            str(self.pk) + ':' +
+            str(self.user_id) + ':' + str(self.username)
+        )
+
+    def __unicode__(self):
+        return (
+            str(self.pk) + ':' +
+            str(self.user_id) + ':' + str(self.username)
+        )
 
 
 class Tags(models.Model):
@@ -28,6 +37,9 @@ class Tags(models.Model):
     tag_owner = models.ForeignKey(Users, on_delete=models.CASCADE)
 
     def __str__(self):
+        return self.tag_text.encode('utf-8')
+
+    def __unicode__(self):
         return self.tag_text.encode('utf-8')
 
 
@@ -55,7 +67,12 @@ class Tasks(models.Model):
         (MEDIUM, 'Medium'),
         (HARD, 'Hard'),
     )
-    priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, blank=False, default=EASY)
+    priority = models.CharField(
+        max_length=3,
+        choices=PRIORITY_CHOICES,
+        blank=False,
+        default=EASY
+    )
     days = models.PositiveIntegerField(default=0)
     delay = models.PositiveIntegerField(default=0)
     owner = models.ForeignKey(Users, on_delete=models.CASCADE)
@@ -65,5 +82,5 @@ class Tasks(models.Model):
     def __str__(self):
         return str(self.pk) + ':' + str(self.name) + ':' + str(self.task_id)
 
-
-
+    def __unicode__(self):
+        return str(self.pk) + ':' + str(self.name) + ':' + str(self.task_id)
