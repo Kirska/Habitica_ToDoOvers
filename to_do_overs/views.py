@@ -2,14 +2,15 @@
 """Django Views - Habitica To Do Over tool
 """
 from __future__ import unicode_literals
+from __future__ import absolute_import
 
 from django.shortcuts import render, redirect
-from app_functions.to_do_overs_data import ToDoOversData
-from forms import TasksModelForm
-from models import Users, Tasks, Tags
+from .app_functions.to_do_overs_data import ToDoOversData
+from .forms import TasksModelForm
+from .models import Users, Tasks, Tags
 import django.contrib.messages as messages
 import jsonpickle
-from app_functions.cipher_functions import encrypt_text
+from .app_functions.cipher_functions import encrypt_text
 from django.http import HttpResponseServerError
 import json
 

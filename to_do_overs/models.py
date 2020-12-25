@@ -2,6 +2,7 @@
 """Django Models - Habitica To Do Over tool
 """
 from __future__ import unicode_literals
+from builtins import str
 from django.db import models
 
 

@@ -2,13 +2,15 @@
 """
 Cipher functions for the Habitica To Do Over tool.
 """
+from __future__ import print_function
+from __future__ import absolute_import
 
 __author__ = "Katie Patterson kirska.com"
 __license__ = "MIT"
 
 import argparse
 from cryptography.fernet import Fernet
-from local_defines import CIPHER_FILE
+from .local_defines import CIPHER_FILE
 
 
 def generate_cipher_key():
@@ -68,9 +70,9 @@ def test_cipher(test_text):
         test_text: some plain text we want to test encrypting and decrypting.
     """
     cipher_text = encrypt_text(test_text)
-    print cipher_text
+    print(cipher_text)
     plain_text = decrypt_text(cipher_text)
-    print plain_text
+    print(plain_text)
 
 """
 parser = argparse.ArgumentParser(description='Generate a cipher.')

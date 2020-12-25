@@ -1,11 +1,12 @@
 """Django Forms - Habitica To Do Over tool
 """
+from builtins import object
 from django import forms
 from .models import Tasks, Tags, Users
 
 
 class TasksModelForm(forms.ModelForm):
-    class Meta:
+    class Meta(object):
         model = Tasks
         fields = ['name', 'notes', 'priority', 'days', 'delay', 'tags']
 

@@ -2,7 +2,9 @@
 
 This script is run once a day to add repeats of tasks.
 """
+from __future__ import print_function
 
+from builtins import str
 __author__ = "Katie Patterson kirska.com"
 __license__ = "MIT"
 
@@ -54,7 +56,7 @@ for task in tasks:
                 task.task_id = tdo_data.task_id
                 task.save()
             else:
-                print 'task creation failed ' + task.task_id
+                print('task creation failed ' + task.task_id)
         elif req_json['data']['completed']:
             # Task was completed but has a delay
             # Get completed date and set to UTC timezone
@@ -94,18 +96,18 @@ for task in tasks:
                     task.task_id = tdo_data.task_id
                     task.save()
                 else:
-                    print 'task creation failed ' + task.task_id
+                    print('task creation failed ' + task.task_id)
         else:
-            print 'task ' + task.task_id + ' not completed or delay not met'
+            print('task ' + task.task_id + ' not completed or delay not met')
     else:
         try:
-            print '\n' + str(req.status_code)
-            print req.text
-            print 'task name ' + task.name
-            print 'task id ' + task.task_id
-            print 'task delay ' + str(task.delay) + '\n'
+            print('\n' + str(req.status_code))
+            print(req.text)
+            print('task name ' + task.name)
+            print('task id ' + task.task_id)
+            print('task delay ' + str(task.delay) + '\n')
         except:
-            print 'task failed with unicode errors'
+            print('task failed with unicode errors')
 
         #headers = {'x-api-user': task.owner.user_id.encode('utf-8'),
         #           'x-api-key': decrypt_text(task.owner.api_key.encode('utf-8'), CIPHER_FILE_SCRIPT)}

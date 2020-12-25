@@ -2,17 +2,20 @@
 
 App controller functions for the Habitica To Do Over tool. For functions that don't fit in the model or views.
 """
+from __future__ import absolute_import
 
+from builtins import str
+from builtins import object
 __author__ = "Katie Patterson kirska.com"
 __license__ = "MIT"
 
-from cipher_functions import encrypt_text, decrypt_text, CIPHER_FILE
+from .cipher_functions import encrypt_text, decrypt_text, CIPHER_FILE
 import requests
 from to_do_overs.models import Users, Tasks, Tags
 from datetime import datetime, timedelta
 
 
-class ToDoOversData:
+class ToDoOversData(object):
     """Session data and application functions that don't fall in models or views.
 
     This class will be stored in a cookie for a login session.
