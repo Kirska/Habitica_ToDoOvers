@@ -17,6 +17,10 @@ class TasksModelForm(forms.ModelForm):
 
         super(TasksModelForm, self).__init__(*args_super, **kwargs)
 
+        # make fields more explanatory
+        self.fields['days'].label = u'Number of days alotted to complete task (enter 0 for no due date)'
+        self.fields['delay'].label = u'Number of days to delay before re-creating task (enter 0 for no delay)'
+
         # get the list of tags for that user
         user = Users.objects.get(user_id=user_id)
 
