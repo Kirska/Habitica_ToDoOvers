@@ -109,6 +109,7 @@ class ToDoOversData:
 
         if int(self.task_days) > 0:
             due_date = datetime.now() + timedelta(days=int(self.task_days))
+            due_date = due_date.isoformat()
 
             req = requests.post('https://habitica.com/api/v3/tasks/user', headers=headers, data={
                 'text': self.task_name,
@@ -151,6 +152,7 @@ class ToDoOversData:
 
         if int(self.task_days) > 0:
             due_date = datetime.now() + timedelta(days=int(self.task_days))
+            due_date = due_date.isoformat()
 
             req = requests.put(url, headers=headers, data={
                 'text': self.task_name,
