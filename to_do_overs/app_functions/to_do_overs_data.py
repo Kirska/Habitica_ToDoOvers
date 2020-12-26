@@ -49,6 +49,8 @@ class ToDoOversData(object):
         self.priority = ''
         self.notes = ''
 
+        self.return_code = 0
+
     def login(self, password):
         """Login with a username and password to Habitica.
 
@@ -62,6 +64,7 @@ class ToDoOversData(object):
             'https://habitica.com/api/v3/user/auth/local/login',
             data={'username': self.username, 'password': password}
         )
+        self.return_code = req.status_code
         if req.status_code == 200:
             req_json = req.json()
             self.hab_user_id = req_json['data']['id']
@@ -94,6 +97,7 @@ class ToDoOversData(object):
         }
 
         req = requests.get('https://habitica.com/api/v3/user', headers=headers)
+        self.return_code = req.status_code
         if req.status_code == 200:
             req_json = req.json()
             self.username = req_json['data']['profile']['name']
@@ -138,6 +142,7 @@ class ToDoOversData(object):
                     'tags': self.tags,
                 }
             )
+            self.return_code = req.status_code
             if req.status_code == 201:
                 req_json = req.json()
                 self.task_id = req_json['data']['id']
@@ -155,6 +160,7 @@ class ToDoOversData(object):
                     'tags': self.tags,
                 }
             )
+            self.return_code = req.status_code
             if req.status_code == 201:
                 req_json = req.json()
                 self.task_id = req_json['data']['id']
@@ -182,6 +188,7 @@ class ToDoOversData(object):
                 'priority': self.priority,
                 'tags': self.tags,
             })
+            self.return_code = req.status_code
             if req.status_code == 200:
                 req_json = req.json()
                 self.task_id = req_json['data']['id']
@@ -194,6 +201,7 @@ class ToDoOversData(object):
                 'priority': self.priority,
                 'tags': self.tags,
             })
+            self.return_code = req.status_code
             if req.status_code == 200:
                 req_json = req.json()
                 self.task_id = req_json['data']['id']
@@ -220,10 +228,16 @@ class ToDoOversData(object):
             headers=headers,
             data={}
         )
+        self.return_code = req.status_code
         if req.status_code == 200:
             req_json = req.json()
 
             user = Users.objects.get(user_id=self.hab_user_id)
+
+            current_tags = Tags.objects.filter(tag_owner=user)
+            current_tag_ids = []
+            for tag in current_tags:
+                current_tag_ids.append(tag.tag_id)
 
             if req_json['data']:
                 # Add/update tags in database
@@ -235,6 +249,12 @@ class ToDoOversData(object):
                             'tag_text': tag_json['name'].encode('utf-8')
                         },
                     )
+                    if tag_json['id'] in current_tag_ids:
+                        current_tag_ids.remove(tag_json['id'])
+
+                for leftover_tag in current_tag_ids:
+                    print('deleting tag ' + leftover_tag)
+                    Tags.objects.filter(tag_id=leftover_tag).delete()
 
                 return req_json['data']
             return False
