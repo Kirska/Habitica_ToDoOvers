@@ -20,12 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '!tsyo30sxj#$1moxv40_z-%sriqxe0paiow$e)emci9jlwjq*#'
+SECRET_KEY = '!tstp40sxj#$1moxv40_z-%sriqxe0paiow$e)emci9jlwjq*#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['kirska.pythonanywhere.com']
 
 
 # Application definition
@@ -77,10 +77,10 @@ WSGI_APPLICATION = 'Habitica_ToDoOvers.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'habitica_tdo',
-        'USER': 'habitica_tdo',
-        'PASSWORD': 'x6c9bNWhBvgfj5',
-        'HOST': 'localhost',
+        'NAME': 'Kirska$habitica_tdo',
+        'USER': 'Kirska',
+        'PASSWORD': 'Mz8PXV62R6sGpq',
+        'HOST': 'Kirska.mysql.pythonanywhere-services.com',
         'PORT': '3306',
     }
 }
