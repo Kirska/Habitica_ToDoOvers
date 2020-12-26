@@ -32,6 +32,7 @@ class TasksModelForm(forms.ModelForm):
         user = Users.objects.get(user_id=user_id)
 
         self.fields['tags'] = forms.ModelMultipleChoiceField(
+            widget=forms.CheckboxSelectMultiple,
             required=False,
             queryset=Tags.objects.filter(tag_owner=user)
         )
