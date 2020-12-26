@@ -156,12 +156,41 @@ def check_recreate_task(req, task):
 
 
 TASKS = Tasks.objects.all()
+user_tags_fetched = []
 
 for task_ in TASKS:
     tdo_data = ToDoOversData()
 
     too_many_requests_delay = True
     current_delay = 0
+
+    # update user's tags
+    if task_.owner.user_id not in user_tags_fetched:
+        user_tags_fetched.append(task_.owner.user_id)
+        while too_many_requests_delay:
+            tdo_data.hab_user_id = task_.owner.user_id
+            tdo_data.api_token = task_.owner.api_key
+            if not tdo_data.get_user_tags():
+                if tdo_data.return_code == 429:
+                    # too many requests
+                    current_delay += 90
+                    too_many_requests_delay = True
+                    print("too many requests, sleeping")
+                    if current_delay > 500:
+                        # stop trying
+                        too_many_requests_delay = False
+                        current_delay = 0
+                    else:
+                        time.sleep(current_delay)
+                else:
+                    too_many_requests_delay = False
+                    current_delay = 0
+            else:
+                too_many_requests_delay = False
+                current_delay = 0
+
+        too_many_requests_delay = True
+        current_delay = 0
 
     while too_many_requests_delay:
         url = 'https://habitica.com/api/v3/tasks/' + str(task_.task_id)

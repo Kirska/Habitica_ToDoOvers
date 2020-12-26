@@ -234,6 +234,11 @@ class ToDoOversData(object):
 
             user = Users.objects.get(user_id=self.hab_user_id)
 
+            current_tags = Tags.objects.filter(tag_owner=user)
+            current_tag_ids = []
+            for tag in current_tags:
+                current_tag_ids.append(tag.tag_id)
+
             if req_json['data']:
                 # Add/update tags in database
                 for tag_json in req_json['data']:
@@ -244,6 +249,12 @@ class ToDoOversData(object):
                             'tag_text': tag_json['name'].encode('utf-8')
                         },
                     )
+                    if tag_json['id'] in current_tag_ids:
+                        current_tag_ids.remove(tag_json['id'])
+
+                for leftover_tag in current_tag_ids:
+                    print('deleting tag ' + leftover_tag)
+                    Tags.objects.filter(tag_id=leftover_tag).delete()
 
                 return req_json['data']
             return False
