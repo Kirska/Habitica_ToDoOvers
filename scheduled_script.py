@@ -55,7 +55,12 @@ def check_recreate_task(req, task):
                     print('too many requests, sleeping')
                     retry = True
                     delay_seconds += 90
-                    time.sleep(delay_seconds)
+                    if delay_seconds > 500:
+                        # stop trying
+                        retry = False
+                        delay_seconds = 0
+                    else:
+                        time.sleep(delay_seconds)
                 else:
                     print('unknown failure')
                     retry = False
@@ -120,7 +125,12 @@ def check_recreate_task(req, task):
                         print('too many requests, sleeping')
                         retry = True
                         delay_seconds += 90
-                        time.sleep(delay_seconds)
+                        if delay_seconds > 500:
+                            # stop trying
+                            retry = False
+                            delay_seconds = 0
+                        else:
+                            time.sleep(delay_seconds)
                     else:
                         print('unknown failure')
                         retry = False
@@ -158,9 +168,18 @@ for task_ in TASKS:
             current_delay += 90
             too_many_requests_delay = True
             print("too many requests, sleeping")
-            time.sleep(current_delay)
+            if current_delay > 500:
+                # stop trying
+                too_many_requests_delay = False
+                current_delay = 0
+            else:
+                time.sleep(current_delay)
         elif req_.status_code == 200:
             check_recreate_task(req_, task_)
+            too_many_requests_delay = False
+        elif req_.status_code == 404:
+            print("deleting task " + task_.task_id)
+            Tasks.objects.filter(task_id=task_.task_id).delete()
             too_many_requests_delay = False
         else:
             print("weird return code")
