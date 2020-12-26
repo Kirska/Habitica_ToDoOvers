@@ -43,28 +43,39 @@ def check_recreate_task(req, task):
         delay_seconds = 0
 
         while retry:
-            if tdo_data.create_task(CIPHER_FILE):
-                task.task_id = tdo_data.task_id
-                task.save()
-                retry = False
-                delay_seconds = 0
-                print('task re-created successfully ' + task.task_id)
-            else:
-                print('task creation failed ' + task.task_id)
-                if tdo_data.return_code == 429:
-                    print('too many requests, sleeping')
-                    retry = True
-                    delay_seconds += 90
-                    if delay_seconds > 500:
-                        # stop trying
-                        retry = False
-                        delay_seconds = 0
-                    else:
-                        time.sleep(delay_seconds)
-                else:
-                    print('unknown failure')
+            try:
+                if tdo_data.create_task(CIPHER_FILE):
+                    task.task_id = tdo_data.task_id
+                    task.save()
                     retry = False
                     delay_seconds = 0
+                    print('task re-created successfully ' + task.task_id)
+                else:
+                    print('task creation failed ' + task.task_id)
+                    if tdo_data.return_code == 429:
+                        print('too many requests, sleeping')
+                        retry = True
+                        delay_seconds += 90
+                        if delay_seconds > 500:
+                            # stop trying
+                            retry = False
+                            delay_seconds = 0
+                        else:
+                            time.sleep(delay_seconds)
+                    else:
+                        print('unknown failure')
+                        retry = False
+                        delay_seconds = 0
+            except AttributeError:
+                print('attribute error, sleep and retry')
+                retry = True
+                delay_seconds += 90
+                if delay_seconds > 500:
+                    # stop trying
+                    retry = False
+                    delay_seconds = 0
+                else:
+                    time.sleep(delay_seconds)
 
     elif req_json['data']['completed']:
         # Task was completed but has a delay
