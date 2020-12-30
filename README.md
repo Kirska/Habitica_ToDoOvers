@@ -47,3 +47,5 @@ If you have any problems or suggestions please open an issue here or contact Kir
 5/14/19 - Finalized some bug fixes with the tags feature
 
 9/24/19 - Fixed a bug causing an error on login occasionally
+
+12/29/20 - Not really doing releases anymore, as an update. Lots of small bug fixes happening.
