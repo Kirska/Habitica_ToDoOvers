@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Habitica To-Do Over Dashboard</title>
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'to_do_overs/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'to_do_overs_app/style.css' %}">
     <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -21,7 +21,7 @@
 
 Hello {{ username }}!<br /><br />
 
-Create a new To-Do Over task <a href="{% url 'to_do_overs:create_task' %}">here</a>.
+Create a new To-Do Over task <a href="{% url 'to_do_overs_app:create_task' %}">here</a>.
 
 <br />
 <br />
@@ -46,8 +46,8 @@ Create a new To-Do Over task <a href="{% url 'to_do_overs:create_task' %}">here<
                 <td>{{ task.days }}</td>
                 <td>{{ task.delay }}</td>
                 <td>{{ task.get_priority_display }}</td>
-                <td><a href="{% url 'to_do_overs:edit_task' task.pk %}">Edit</a></td>
-                <td><a href="{% url 'to_do_overs:delete_task' task.pk %}">Delete</a></td>
+                <td><a href="{% url 'to_do_overs_app:edit_task' task.pk %}">Edit</a></td>
+                <td><a href="{% url 'to_do_overs_app:delete_task' task.pk %}">Delete</a></td>
             </tr>
         {% endfor %}
         </tbody>
@@ -58,7 +58,7 @@ Create a new To-Do Over task <a href="{% url 'to_do_overs:create_task' %}">here<
 For more info on this tool visit the <a href="https://github.com/Kirska/Habitica_ToDoOvers/">GitHub repo.</a>
 <br />
 <br />
-<a href="{% url 'to_do_overs:logout' %}">Log Out</a>
+<a href="{% url 'to_do_overs_app:logout' %}">Log Out</a>
 </div>
 </body>
 <footer></footer>

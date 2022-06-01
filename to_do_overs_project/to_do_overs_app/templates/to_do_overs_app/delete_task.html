@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Delete To-Do Over Task</title>
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'to_do_overs/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'to_do_overs_app/style.css' %}">
     <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -40,8 +40,8 @@ Are you sure you want to delete this task?<br /><br />
     </table>
     <br/>
 
-    <a href="{% url 'to_do_overs:delete_task_confirm' task.pk %}">Yes, delete!</a><br />
-    <a href="{% url 'to_do_overs:dashboard' %}">No, take me back.</a>
+    <a href="{% url 'to_do_overs_app:delete_task_confirm' task.pk %}">Yes, delete!</a><br />
+    <a href="{% url 'to_do_overs_app:dashboard' %}">No, take me back.</a>
 
     <br /><br />
     If your task is still active on Habitica, it will stay there. This only deletes the tool's copy.
@@ -49,7 +49,7 @@ Are you sure you want to delete this task?<br /><br />
     <br /><br />
 {% endif %}
 
-<a href="{% url 'to_do_overs:logout' %}">Log Out</a>
+<a href="{% url 'to_do_overs_app:logout' %}">Log Out</a>
 </div>
 </body>
 <footer></footer>

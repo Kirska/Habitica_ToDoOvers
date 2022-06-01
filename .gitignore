@@ -5,7 +5,7 @@ db.sqlite3
 
 *.pyc
 
-to_do_overs/migrations/
+to_do_overs_app/migrations/
 
 venv/
 venv27/
@@ -13,3 +13,12 @@ venv27/
 cipher.bin
 
 settings.py
+
+build/
+dist/
+
+to_do_overs.egg-info/
+
+.vscode/
+
+config.ini

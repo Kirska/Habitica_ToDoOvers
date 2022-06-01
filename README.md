@@ -4,9 +4,9 @@ The tool is currently running at [this link](https://kirska.pythonanywhere.com).
 ### What is a To-Do Over?
 A To-Do Over is a To-Do task that automatically repeats upon completion.
 
-As an example, say you need to do laundry once a week, but you don't care what day of the week it gets done, and you'll need to do it every week. 
+As an example, say you need to do laundry once a week, but you don't care what day of the week it gets done, and you'll need to do it every week.
 
-Enter To-Do Overs. 
+Enter To-Do Overs.
 
 You can create a To-Do Over task with a length of 7 days, and you can mark it complete anytime in that 7 day period, and when you do, the tool will automatically create a new to-do for laundry with 7 days from THAT date.
 

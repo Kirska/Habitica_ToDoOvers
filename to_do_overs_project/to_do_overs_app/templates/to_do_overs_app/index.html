@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Habitica To-Do Overs</title>
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'to_do_overs/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'to_do_overs_app/style.css' %}">
     <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -20,7 +20,7 @@
 {% endif %}
 
 <h5>Login using Habitica email and password</h5>
-<form action="{% url 'to_do_overs:login' %}" method="post">
+<form action="{% url 'to_do_overs_app:login' %}" method="post">
     {% csrf_token %}
     <div class="row">
         <div class="six columns">
@@ -36,7 +36,7 @@
 </form>
 
 <h5>Login using Habitica user ID and API token</h5>
-<form action="{% url 'to_do_overs:login_api_key' %}" method="post">
+<form action="{% url 'to_do_overs_app:login_api_key' %}" method="post">
     {% csrf_token %}
     <div class="row">
         <div class="six columns">

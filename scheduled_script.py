@@ -5,25 +5,27 @@ This script is run once a day to add repeats of tasks.
 from __future__ import print_function
 
 from builtins import str
+
 __author__ = "Katie Patterson kirska.com"
 __license__ = "MIT"
 
-from datetime import datetime
 import time
+from datetime import datetime
+
 import pytz
 import requests
+from to_do_overs.app_functions.cipher_functions import decrypt_text
+from to_do_overs.app_functions.local_defines import CIPHER_FILE
+from to_do_overs.app_functions.to_do_overs_data import ToDoOversData
+from to_do_overs.models import Tasks
+
 # pylint: disable=unused-import
 from Habitica_ToDoOvers.wsgi import application  # noqa: F401
-
-from to_do_overs.models import Tasks
-from to_do_overs.app_functions.cipher_functions import decrypt_text
-from to_do_overs.app_functions.to_do_overs_data import ToDoOversData
-from to_do_overs.app_functions.local_defines import CIPHER_FILE
 
 
 def check_recreate_task(req, task):
     req_json = req.json()
-    if req_json['data']['completed'] and task.delay == 0:
+    if req_json["data"]["completed"] and task.delay == 0:
         # Task was completed and there is no delay so recreate it
         tdo_data.hab_user_id = task.owner.user_id
         tdo_data.priority = task.priority
@@ -49,11 +51,11 @@ def check_recreate_task(req, task):
                     task.save()
                     retry = False
                     delay_seconds = 0
-                    print('task re-created successfully ' + task.task_id)
+                    print("task re-created successfully " + task.task_id)
                 else:
-                    print('task creation failed ' + task.task_id)
+                    print("task creation failed " + task.task_id)
                     if tdo_data.return_code == 429:
-                        print('too many requests, sleeping')
+                        print("too many requests, sleeping")
                         retry = True
                         delay_seconds += 90
                         if delay_seconds > 500:
@@ -63,11 +65,11 @@ def check_recreate_task(req, task):
                         else:
                             time.sleep(delay_seconds)
                     else:
-                        print('unknown failure')
+                        print("unknown failure")
                         retry = False
                         delay_seconds = 0
             except AttributeError:
-                print('attribute error, sleep and retry')
+                print("attribute error, sleep and retry")
                 retry = True
                 delay_seconds += 90
                 if delay_seconds > 500:
@@ -77,16 +79,14 @@ def check_recreate_task(req, task):
                 else:
                     time.sleep(delay_seconds)
 
-    elif req_json['data']['completed']:
+    elif req_json["data"]["completed"]:
         # Task was completed but has a delay
         # Get completed date and set to UTC timezone
         completed_date_naive = datetime.strptime(
-            req_json['data']['dateCompleted'], '%Y-%m-%dT%H:%M:%S.%fZ'
+            req_json["data"]["dateCompleted"], "%Y-%m-%dT%H:%M:%S.%fZ"
         )
         utc_timezone = pytz.timezone("UTC")
-        completed_date_aware = utc_timezone.localize(
-            completed_date_naive
-        )
+        completed_date_aware = utc_timezone.localize(completed_date_naive)
         # Get current UTC time
         utc_now = pytz.utc.localize(datetime.utcnow())
 
@@ -94,9 +94,7 @@ def check_recreate_task(req, task):
         completed_date_aware = completed_date_aware.replace(
             hour=0, minute=0, second=0, microsecond=0
         )
-        utc_now = utc_now.replace(
-            hour=0, minute=0, second=0, microsecond=0
-        )
+        utc_now = utc_now.replace(hour=0, minute=0, second=0, microsecond=0)
 
         # TESTING - add days to current date
         # utc_now = utc_now + timedelta(days=2)
@@ -129,11 +127,11 @@ def check_recreate_task(req, task):
                     task.save()
                     retry = False
                     delay_seconds = 0
-                    print('task re-created successfully ' + task.task_id)
+                    print("task re-created successfully " + task.task_id)
                 else:
-                    print('task creation failed ' + task.task_id)
+                    print("task creation failed " + task.task_id)
                     if tdo_data.return_code == 429:
-                        print('too many requests, sleeping')
+                        print("too many requests, sleeping")
                         retry = True
                         delay_seconds += 90
                         if delay_seconds > 500:
@@ -143,16 +141,14 @@ def check_recreate_task(req, task):
                         else:
                             time.sleep(delay_seconds)
                     else:
-                        print('unknown failure')
+                        print("unknown failure")
                         retry = False
                         delay_seconds = 0
         else:
-            print('task completed but delay not met ' + task.task_id)
+            print("task completed but delay not met " + task.task_id)
 
     else:
-        print(
-            'task not completed ' + task.task_id
-        )
+        print("task not completed " + task.task_id)
 
 
 TASKS = Tasks.objects.all()
@@ -193,12 +189,10 @@ for task_ in TASKS:
         current_delay = 0
 
     while too_many_requests_delay:
-        url = 'https://habitica.com/api/v3/tasks/' + str(task_.task_id)
+        url = "https://habitica.com/api/v3/tasks/" + str(task_.task_id)
         headers = {
-            'x-api-user': str(task_.owner.user_id),
-            'x-api-key': decrypt_text(
-                task_.owner.api_key.encode('utf-8'), CIPHER_FILE
-            )
+            "x-api-user": str(task_.owner.user_id),
+            "x-api-key": decrypt_text(task_.owner.api_key.encode("utf-8"), CIPHER_FILE),
         }
 
         req_ = requests.get(url, headers=headers)

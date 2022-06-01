@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
 """Django Models - Habitica To Do Over tool
 """
-from __future__ import unicode_literals
-from builtins import str
 from django.db import models
 
 
@@ -14,21 +11,16 @@ class Users(models.Model):
         user_id (str): User ID from Habitica.
         api_key (str): API token from Habitica.
     """
+
     user_id = models.CharField(max_length=255, unique=True)
     api_key = models.CharField(max_length=255)
     username = models.CharField(max_length=255)
 
     def __str__(self):
-        return (
-            str(self.pk) + ':' +
-            str(self.user_id) + ':' + str(self.username)
-        )
+        return str(self.pk) + ":" + str(self.user_id) + ":" + str(self.username)
 
     def __unicode__(self):
-        return (
-            str(self.pk) + ':' +
-            str(self.user_id) + ':' + str(self.username)
-        )
+        return str(self.pk) + ":" + str(self.user_id) + ":" + str(self.username)
 
 
 class Tags(models.Model):
@@ -37,10 +29,10 @@ class Tags(models.Model):
     tag_owner = models.ForeignKey(Users, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.tag_text.decode('unicode_escape')
+        return self.tag_text.decode("unicode_escape")
 
     def __unicode__(self):
-        return self.tag_text.decode('unicode_escape')
+        return self.tag_text.decode("unicode_escape")
 
 
 class Tasks(models.Model):
@@ -54,25 +46,21 @@ class Tasks(models.Model):
         days (int): Number of days until task expires from the creation.
         owner (int/Foreign Key): The owner from the users model.
     """
+
     task_id = models.CharField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
     notes = models.TextField(blank=True)
-    TRIVIAL = '0.1'
-    EASY = '1.0'
-    MEDIUM = '1.5'
-    HARD = '2'
+    TRIVIAL = "0.1"
+    EASY = "1.0"
+    MEDIUM = "1.5"
+    HARD = "2"
     PRIORITY_CHOICES = (
-        (TRIVIAL, 'Trivial'),
-        (EASY, 'Easy'),
-        (MEDIUM, 'Medium'),
-        (HARD, 'Hard'),
+        (TRIVIAL, "Trivial"),
+        (EASY, "Easy"),
+        (MEDIUM, "Medium"),
+        (HARD, "Hard"),
     )
-    priority = models.CharField(
-        max_length=3,
-        choices=PRIORITY_CHOICES,
-        blank=False,
-        default=EASY
-    )
+    priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, blank=False, default=EASY)
     days = models.PositiveIntegerField(default=0)
     delay = models.PositiveIntegerField(default=0)
     owner = models.ForeignKey(Users, on_delete=models.CASCADE)
@@ -80,7 +68,7 @@ class Tasks(models.Model):
     tags = models.ManyToManyField(Tags)
 
     def __str__(self):
-        return str(self.pk) + ':' + str(self.name) + ':' + str(self.task_id)
+        return str(self.pk) + ":" + str(self.name) + ":" + str(self.task_id)
 
     def __unicode__(self):
-        return str(self.pk) + ':' + str(self.name) + ':' + str(self.task_id)
+        return str(self.pk) + ":" + str(self.name) + ":" + str(self.task_id)

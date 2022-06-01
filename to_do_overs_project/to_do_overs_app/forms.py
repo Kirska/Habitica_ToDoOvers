@@ -1,14 +1,14 @@
 """Django Forms - Habitica To Do Over tool
 """
-from builtins import object
 from django import forms
-from .models import Tasks, Tags, Users
+
+from .models import Tags, Tasks, Users
 
 
 class TasksModelForm(forms.ModelForm):
     class Meta(object):
         model = Tasks
-        fields = ['name', 'notes', 'priority', 'days', 'delay', 'tags']
+        fields = ["name", "notes", "priority", "days", "delay", "tags"]
 
     tags = forms.ModelMultipleChoiceField(queryset=Tags.objects.all())
 
@@ -19,20 +19,18 @@ class TasksModelForm(forms.ModelForm):
         super(TasksModelForm, self).__init__(*args_super, **kwargs)
 
         # make fields more explanatory
-        self.fields['days'].label = (
-            u'Number of days allotted to complete task' +
-            u' (enter 0 for no due date)'
+        self.fields["days"].label = (
+            "Number of days allotted to complete task" + " (enter 0 for no due date)"
         )
-        self.fields['delay'].label = (
-            u'Number of days to delay before re-creating' +
-            u' task (enter 0 for no delay)'
+        self.fields["delay"].label = (
+            "Number of days to delay before re-creating" + " task (enter 0 for no delay)"
         )
 
         # get the list of tags for that user
         user = Users.objects.get(user_id=user_id)
 
-        self.fields['tags'] = forms.ModelMultipleChoiceField(
+        self.fields["tags"] = forms.ModelMultipleChoiceField(
             widget=forms.CheckboxSelectMultiple,
             required=False,
-            queryset=Tags.objects.filter(tag_owner=user)
+            queryset=Tags.objects.filter(tag_owner=user),
         )

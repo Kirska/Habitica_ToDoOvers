@@ -1,16 +1,17 @@
-#!/usr/bin/env python
 """
 Cipher functions for the Habitica To Do Over tool.
 """
-from __future__ import print_function
-from __future__ import absolute_import
-
 __author__ = "Katie Patterson kirska.com"
 __license__ = "MIT"
 
-# import argparse
+import argparse
+import configparser
+
 from cryptography.fernet import Fernet
-from .local_defines import CIPHER_FILE
+
+config = configparser.ConfigParser()
+config.read("config.ini")
+CIPHER_FILE = config["local"]["CIPHER_FILE"]
 
 
 def generate_cipher_key():
@@ -21,7 +22,7 @@ def generate_cipher_key():
     This will make all existing data GARBAGE so use with caution.
     """
     key = Fernet.generate_key()
-    with open(CIPHER_FILE, 'wb') as cipher_file:
+    with open(CIPHER_FILE, "wb") as cipher_file:
         cipher_file.write(key)
 
 
@@ -36,7 +37,7 @@ def encrypt_text(text):
     Returns:
         The encrypted text.
     """
-    with open(CIPHER_FILE, 'rb') as cipher_file:
+    with open(CIPHER_FILE, "rb") as cipher_file:
         key = cipher_file.read()
         cipher_suite = Fernet(key)
         cipher_text = cipher_suite.encrypt(text)
@@ -55,7 +56,7 @@ def decrypt_text(cipher_text, cipher_file_path=CIPHER_FILE):
     Returns:
         The decrypted text.
     """
-    with open(cipher_file_path, 'rb') as cipher_file:
+    with open(cipher_file_path, "rb") as cipher_file:
         key = cipher_file.read()
         cipher_suite = Fernet(key)
         plain_text = cipher_suite.decrypt(cipher_text)
@@ -77,17 +78,18 @@ def test_cipher(test_text):
     print(plain_text)
 
 
-"""
-parser = argparse.ArgumentParser(description='Generate a cipher.')
-parser.add_argument('--generate', action='store_true',
-                    help='generate a new cipher' +
-                    'and store in a file USE WITH CAUTION')
-parser.add_argument('--test', help='test your existing cipher')
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Generate a cipher.")
+    parser.add_argument(
+        "--generate",
+        action="store_true",
+        help="generate a new cipher" + "and store in a file USE WITH CAUTION",
+    )
+    parser.add_argument("--test", help="test your existing cipher")
 
-args = parser.parse_args()
+    args = parser.parse_args()
 
-if args.generate:
-    generate_cipher_key()
-elif args.test:
-    test_cipher(args.test)
-"""
+    if args.generate:
+        generate_cipher_key()
+    elif args.test:
+        test_cipher(args.test)
