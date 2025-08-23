@@ -198,7 +198,8 @@ for task_ in TASKS:
             'x-api-user': str(task_.owner.user_id),
             'x-api-key': decrypt_text(
                 task_.owner.api_key.encode('utf-8'), CIPHER_FILE
-            )
+            ),
+            'x-client': 'Kirska-ToDoOvers',
         }
 
         req_ = requests.get(url, headers=headers)
@@ -217,6 +218,10 @@ for task_ in TASKS:
         elif req_.status_code == 200:
             check_recreate_task(req_, task_)
             too_many_requests_delay = False
+        elif req_.status_code == 401:
+            print("login failed for " + task_.owner.user_id)
+            Tasks.objects.filter(task_id=task_.task_id).delete()
+            too_many_requests_delay = False
         elif req_.status_code == 404:
             print("deleting task " + task_.task_id)
             Tasks.objects.filter(task_id=task_.task_id).delete()
@@ -224,4 +229,5 @@ for task_ in TASKS:
         else:
             print("weird return code")
             print(req_.status_code)
+            print(req_.text)
             too_many_requests_delay = False

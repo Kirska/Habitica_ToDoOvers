@@ -93,6 +93,7 @@ class ToDoOversData(object):
         headers = {
             'x-api-user': self.hab_user_id.encode('utf-8'),
             'x-api-key': decrypt_text(self.api_token),
+            'x-client': 'Kirska-ToDoOvers',
             'Content-Type': 'application/json'
         }
 
@@ -123,7 +124,8 @@ class ToDoOversData(object):
             'x-api-key': decrypt_text(
                 self.api_token.encode('utf-8'),
                 cipher_file_path
-            )
+            ),
+            'x-client': 'Kirska-ToDoOvers',
         }
 
         if int(self.task_days) > 0:
@@ -174,7 +176,8 @@ class ToDoOversData(object):
             True for success, False for failure.
         """
         headers = {'x-api-user': self.hab_user_id.encode('utf-8'),
-                   'x-api-key': decrypt_text(self.api_token.encode('utf-8'))}
+                   'x-api-key': decrypt_text(self.api_token.encode('utf-8')),
+                   'x-client': 'Kirska-ToDoOvers'}
         url = 'https://habitica.com/api/v3/tasks/' + str(self.task_id)
 
         if int(self.task_days) > 0:
@@ -220,7 +223,8 @@ class ToDoOversData(object):
             'x-api-key': decrypt_text(
                 self.api_token.encode('utf-8'),
                 cipher_file_path,
-            )
+            ),
+            'x-client': 'Kirska-ToDoOvers',
         }
 
         req = requests.get(
@@ -243,7 +247,6 @@ class ToDoOversData(object):
                 # Add/update tags in database
                 for tag_json in req_json['data']:
                     tag_text = tag_json['name']
-                    tag_text = tag_text.encode('unicode_escape')
 
                     Tags.objects.update_or_create(
                         tag_id=tag_json['id'].encode('utf-8'),
